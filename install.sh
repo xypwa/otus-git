@@ -30,6 +30,7 @@ cat <<'EOF' > /etc/apache2/sites-enabled/majordomo.conf
     </Directory>
 </VirtualHost>
 EOF
+systemctl reload apache2;
 
 # распаковка и установка majordomo #
 APP_HOME_DIR='/var/www/majordomo';
@@ -51,15 +52,17 @@ mysql -uroot <<'EOF'
 CREATE DATABASE majordomo DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
 CREATE USER 'majordomo'@'localhost' IDENTIFIED WITH 'caching_sha2_password' BY 'qwertyzxv';
 GRANT ALL PRIVILEGES ON majordomo.* TO 'majordomo'@'localhost' WITH GRANT OPTION;
+GRANT RELOAD, FLUSH_TABLES ON *.* TO 'majordomo'@'localhost';
 FLUSH PRIVILEGES;
 EOF
 
 read -p 'Накатить пустую базу по умочанию?[Y/n]:' IMPORT_EMPTY_BASE;
 if [[ $IMPORT_EMPTY_BASE -eq 'n' || $IMPORT_EMPTY_BASE == 'N' ]]; then
     echo '';
+    mysql -v -uroot majordomo< "$APP_HOME_DIR/db_terminal.sql";
 else 
     echo '';
 fi;
 
 # установка #
-# php $APP_HOME_DIRcycle.php
+php "$APP_HOME_DIR/cycle.php";
