@@ -55,3 +55,4 @@ sed -i "1i\upstream work_nodes {\n\tserver $ip_app_node-1:80;\n\tserver $ip_app_
 
 cat /home/xypwa/restore/nginx/manage /etc/nginx/sites-available/manage;
 ln -sf /etc/nginx/sites-available/manage /etc/nginx/sites-enabled/manage;
+htpasswd -c /etc/nginx/conf.d/.htpasswd xypwa
