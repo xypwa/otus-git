@@ -46,3 +46,12 @@ done
 #sshpass -f pass.txt ssh-copy-id -i elk xypwa@$ip_elk;
 
 #rsync -e "ssh -i /root/.ssh/app_rsrv" /root/certs/* xypwa@192.168.71.133:/home/xypwa/
+
+#
+# настройка nginx 
+#
+cat /home/xypwa/restore/nginx/default > /etc/nginx/sites-avaliable/default
+sed -i "1i\upstream work_nodes {\n\tserver $ip_app_node-1:80;\n\tserver $ip_app_node-2:80;\n}\n";
+
+cat /home/xypwa/restore/nginx/manage /etc/nginx/sites-available/manage;
+ln -sf /etc/nginx/sites-available/manage /etc/nginx/sites-enabled/manage;
