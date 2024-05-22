@@ -1,0 +1,19 @@
+server {
+        listen 443 ssl;
+        server_name _;
+        ssl_certificate /root/certs/localhost_rootCA.crt;
+        ssl_certificate_key /root/certs/localhost_rootCA.key;
+        root /var/www/html/manage;
+        access_log /var/log/nginx/manage.log;
+
+        location ~\.php$ {
+
+                fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+                fastcgi_index index.php;
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                include /etc/nginx/fastcgi_params;
+        }
+        location / {
+                index index.php;
+        }
+}
