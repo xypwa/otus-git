@@ -5,6 +5,7 @@
 apt update;
 apt-get install nginx -y;
 apt-get ngx_http_auth_digest;
+apt install apache2-utils -y;
 apt-get install tree -y;
 apt-get install mc -y;
 apt-get install rsync -y;
