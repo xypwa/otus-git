@@ -18,7 +18,7 @@ echo 'qwertyzxv' > pass.txt
 # настройка авторизации по ключу
 #
 # сгенерируем общий ключ для всех хостов
-ssh-keygen -t rsa -f general -N ''
+ssh-keygen -t rsa -f ~/.ssh/general -N ''
 
 # закинем список хостов в файл
 #echo "$ip_app_node-1 $ip_app_node-2 $ip_db_master $ip_db_slave $ip_elk" > ~/my_hosts.txt
