@@ -40,13 +40,13 @@ done
 #
 # настройка nginx 
 #
-if [[ -e /home/xypwa/restore/nginx/default ]] then;
+if [[ -e /home/xypwa/restore/nginx/default ]]; then;
     cat /home/xypwa/restore/nginx/default > /etc/nginx/sites-avaliable/default;
     sed -i "1i\upstream work_nodes {\n\tserver $ip_app_node-1:80;\n\tserver $ip_app_node-2:80;\n}\n";
     #htpasswd -c /etc/nginx/conf.d/.htpasswd xypwa
 fi;
 
-if [[ -e /home/xypwa/restore/nginx/manage ]] then;
+if [[ -e /home/xypwa/restore/nginx/manage ]]; then;
     # создание сертификата
     #mkdir ~/certs && cd ~/certs;
     
