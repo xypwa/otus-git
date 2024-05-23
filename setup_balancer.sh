@@ -1,5 +1,6 @@
 #!/bin/bash
 
+REPO_DIR='/root/otus-git';
 # Пропускаем проверку незнакомых хостов при ssh подключении #
 echo "    UserKnownHostsFile /dev/null\n    StrictHostKeyChecking no" >> /etc/ssh/ssh_config;
 
@@ -40,13 +41,13 @@ done
 #
 # настройка nginx 
 #
-if [[ -e /home/xypwa/restore/nginx/default ]]; then;
-    cat /home/xypwa/restore/nginx/default > /etc/nginx/sites-avaliable/default;
+if [[ -e "$REPO_DIR/nginx/default" ]]; then;
+    cat "$REPO_DIR//nginx/default" > /etc/nginx/sites-avaliable/default;
     sed -i "1i\upstream work_nodes {\n\tserver $ip_app_node-1:80;\n\tserver $ip_app_node-2:80;\n}\n";
     #htpasswd -c /etc/nginx/conf.d/.htpasswd xypwa
 fi;
 
-if [[ -e /home/xypwa/restore/nginx/manage ]]; then;
+if [[ -e "$REPO_DIR/nginx/manage" ]]; then;
     # создание сертификата
     #mkdir ~/certs && cd ~/certs;
     
@@ -55,6 +56,6 @@ if [[ -e /home/xypwa/restore/nginx/manage ]]; then;
     #openssl x509 -signkey localhost_rootCA.key -in localhost_rootCA.csr -req -days 365 -out localhost_rootCA.crt;
     #openssl req -newkey rsa:2048 -nodes -keyout localhost_rootCA.key -x509 -days 365 -out localhost_rootCA.crt < cert_pass_params.txt
 
-    cat /home/xypwa/restore/nginx/manage /etc/nginx/sites-available/manage;
+    cat "$REPO_DIR/nginx/manage" /etc/nginx/sites-available/manage;
     ln -sf /etc/nginx/sites-available/manage /etc/nginx/sites-enabled/manage;
 fi;    
