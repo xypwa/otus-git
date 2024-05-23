@@ -1,10 +1,8 @@
 #!/bin/bash
 
-
-
 # Пропускаем проверку незнакомых хостов при ssh подключении #
 echo "    UserKnownHostsFile /dev/null\n    StrictHostKeyChecking no" >> /etc/ssh/ssh_config;
-user=`whoami`;
+
 ip_app_node-1=192.168.71.140;
 #ip_app_node-2=192.168.71.143;
 #ip_db_master=192.168.71.133;
@@ -12,16 +10,13 @@ ip_app_node-1=192.168.71.140;
 #ip_elk=192.168.71.133;
 
 
+# через sudo su зашли под рутом
+cd ~;
+echo 'qwertyzxv' > pass.txt
+
 #
 # настройка авторизации по ключу
 #
-
-echo 'qwertyzxv' > pass.txt
-cat pass.txt | sudo -S su 
-cd ~;
-mv "/home/$user/pass.txt" /root;
-
-
 # сгенерируем общий ключ для всех хостов
 ssh-keygen -t rsa -f general -N ''
 
