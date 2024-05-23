@@ -2,7 +2,7 @@
 
 REPO_DIR='/root/otus-git';
 # Пропускаем проверку незнакомых хостов при ssh подключении #
-echo "    UserKnownHostsFile /dev/null\n    StrictHostKeyChecking no" >> /etc/ssh/ssh_config;
+echo -e "    UserKnownHostsFile /dev/null\n    StrictHostKeyChecking no" >> /etc/ssh/ssh_config;
 
 ip_app_node-1=192.168.71.140;
 #ip_app_node-2=192.168.71.143;
