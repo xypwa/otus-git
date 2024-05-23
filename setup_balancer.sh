@@ -4,7 +4,7 @@ REPO_DIR='/root/otus-git';
 # Пропускаем проверку незнакомых хостов при ssh подключении #
 echo -e "    UserKnownHostsFile /dev/null\n    StrictHostKeyChecking no" >> /etc/ssh/ssh_config;
 
-ip_app_node-1=192.168.71.140;
+ip_app_node-1="192.168.71.140";
 #ip_app_node-2=192.168.71.143;
 #ip_db_master=192.168.71.133;
 #ip_db_slave=192.168.71.133;
@@ -41,13 +41,13 @@ done
 #
 # настройка nginx 
 #
-if [[ -e "$REPO_DIR/nginx/default" ]]; then;
+if [[ -e "$REPO_DIR/nginx/default" ]]; then
     cat "$REPO_DIR//nginx/default" > /etc/nginx/sites-avaliable/default;
     sed -i "1i\upstream work_nodes {\n\tserver $ip_app_node-1:80;\n\tserver $ip_app_node-2:80;\n}\n";
     #htpasswd -c /etc/nginx/conf.d/.htpasswd xypwa
 fi;
 
-if [[ -e "$REPO_DIR/nginx/manage" ]]; then;
+if [[ -e "$REPO_DIR/nginx/manage" ]]; then
     # создание сертификата
     #mkdir ~/certs && cd ~/certs;
     
