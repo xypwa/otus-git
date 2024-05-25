@@ -6,7 +6,7 @@ echo -e "    UserKnownHostsFile /dev/null\n    StrictHostKeyChecking no" >> /etc
 
 ip_app_node_1="192.168.71.140";
 ip_app_node_2="192.168.71.143";
-#ip_db_master=192.168.71.133;
+#ip_db_master=192.168.71.147;
 #ip_db_slave=192.168.71.133;
 #ip_elk=192.168.71.133;
 
