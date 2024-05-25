@@ -1,8 +1,8 @@
 server {
         listen 443 ssl;
         server_name _;
-        ssl_certificate /root/certs/localhost_rootCA.crt;
-        ssl_certificate_key /root/certs/localhost_rootCA.key;
+        ssl_certificate /etc/nginx/certs/my/localhost_rootCA.crt;
+        ssl_certificate_key /etc/nginx/certs/my/localhost_rootCA.key;
         root /var/www/html/manage;
         access_log /var/log/nginx/manage.log;
 
