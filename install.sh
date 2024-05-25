@@ -1,7 +1,11 @@
 #!/bin/bash
 
+DB_MASTER_IP="192.168.71.147";
+
 # установим хост #
 sed -i 's/^\(127.0.0.1\s*\).*$/\1app-node/' /etc/hosts;
+text="db_master_host $DB_MASTER_IP\n";
+sed -i '$a '"$text"'' /etc/hosts;
 
 # php config #
 PHP_INI_PATH='/etc/php/7.4/apache2/php.ini';
@@ -39,7 +43,8 @@ mkdir $APP_HOME_DIR;
 cp -r ~/majordomo_repo/majordomo/* $APP_HOME_DIR;
 cp "$APP_HOME_DIR/config.php.sample" "$APP_HOME_DIR/config.php";
 
-sed -i "s/Define('DB_HOST', '.*');/Define('DB_HOST', 'localhost');/" "$APP_HOME_DIR/config.php";
+#sed -i "s/Define('DB_HOST', '.*');/Define('DB_HOST', 'localhost');/" "$APP_HOME_DIR/config.php";
+sed -i "s/Define('DB_HOST', '.*');/Define('DB_HOST', 'db_master_host');/" "$APP_HOME_DIR/config.php";
 sed -i "s/Define('DB_NAME', '.*');/Define('DB_NAME', 'majordomo');/" "$APP_HOME_DIR/config.php";
 sed -i "s/Define('DB_USER', '.*');/Define('DB_USER', 'majordomo');/" "$APP_HOME_DIR/config.php";
 sed -i "s/Define('DB_PASSWORD', '.*');/Define('DB_PASSWORD', 'qwertyzxv');/" "$APP_HOME_DIR/config.php";
@@ -48,13 +53,13 @@ chown -R www-data:www-data $APP_HOME_DIR;
 
 # настройка базы #
 
-mysql -uroot <<'EOF'
-CREATE DATABASE majordomo DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-CREATE USER 'majordomo'@'localhost' IDENTIFIED WITH 'caching_sha2_password' BY 'qwertyzxv';
-GRANT ALL PRIVILEGES ON majordomo.* TO 'majordomo'@'localhost' WITH GRANT OPTION;
-GRANT RELOAD, FLUSH_TABLES ON *.* TO 'majordomo'@'localhost';
-FLUSH PRIVILEGES;
-EOF
+#mysql -uroot <<'EOF'
+#CREATE DATABASE majordomo DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+#CREATE USER 'majordomo'@'localhost' IDENTIFIED WITH 'caching_sha2_password' BY 'qwertyzxv';
+#GRANT ALL PRIVILEGES ON majordomo.* TO 'majordomo'@'localhost' WITH GRANT OPTION;
+#GRANT RELOAD, FLUSH_TABLES ON *.* TO 'majordomo'@'localhost';
+#FLUSH PRIVILEGES;
+#EOF
 
 read -p 'Накатить пустую базу по умочанию?[Y/n]:' IMPORT_EMPTY_BASE;
 if [[ $IMPORT_EMPTY_BASE -eq 'n' || $IMPORT_EMPTY_BASE == 'N' ]]; then
