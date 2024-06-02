@@ -16,5 +16,6 @@ EOF
 
 #sed -i "s/^\(bind-address\s*=\s*\).*$/\1$APP_NODE_1/" /etc/mysql/mysql.conf.d/mysqld.cnf; 
 sed -i "s/^\(bind-address\s*=\s*\).*$/\10.0.0.0" /etc/mysql/mysql.conf.d/mysqld.cnf; 
-
+sed -i '/^bind-address/a\
+require_secure_transport = ON' /etc/mysql/mysql.conf.d/mysqld.cnf
 service mysql restart;
