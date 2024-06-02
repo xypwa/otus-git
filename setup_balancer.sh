@@ -5,10 +5,14 @@ REPO_DIR='/root/otus-git';
 echo -e "    UserKnownHostsFile /dev/null\n    StrictHostKeyChecking no" >> /etc/ssh/ssh_config;
 
 ip_app_node_1="192.168.71.140";
+branch_app_node_1="app-node-1";
 ip_app_node_2="192.168.71.143";
-#ip_db_master=192.168.71.147;
-#ip_db_slave=192.168.71.133;
-#ip_elk=192.168.71.133;
+branch_app_node_2="app-node-2";
+ip_db_master="192.168.71.147";
+branch_db_master="db_master";
+#ip_db_slave="192.168.71.133";
+#slave_db_master="db_master";
+#ip_elk="192.168.71.133";
 
 
 # через sudo su зашли под рутом
@@ -23,24 +27,26 @@ ssh-keygen -t rsa -f ~/.ssh/general -N ''
 
 # закинем список хостов в файл
 #echo "$ip_app_node-1 $ip_app_node-2 $ip_db_master $ip_db_slave $ip_elk" > ~/my_hosts.txt
-echo "$ip_app_node_1 " > my_hosts.txt;
-#echo "$ip_app_node_2 " >> my_hosts.txt
-#echo "$ip_db_master " >> my_hosts.txt
+echo "$ip_app_node_1 $branch_app_node_1\n" > my_hosts.txt;
+echo "$ip_app_node_2 " >> my_hosts.txt
+echo "$ip_db_master $branch_db_master\n" >> my_hosts.txt
 #echo "$ip_db_slave " >> my_hosts.txt
 #echo "$ip_elk" >> my_hosts.txt
 
 # закидываем ключи на узлы
-for ip in `cat ~/my_hosts.txt`; do
-    sshpass -f ~/pass.txt ssh-copy-id -i ~/.ssh/general.pub $ip
+for line in `cat ~/my_hosts.txt`; do
+    arr=($line);
+    if [ ${arr[0]} ]; then
+        sshpass -f ~/pass.txt ssh-copy-id -i ~/.ssh/general.pub "${arr[0]}";
+    fi;
+    if [ ${arr[1]} ]; then
+        git clone -b "${arr[1]} --single-branch https://github.com/xypwa/otis-git.git";
+        rsync -avz  "~/${arr[1]} xypwa@${arr[0]}":/home/xypwa/install
+    fi;
 done
 
-#sshpass -f pass.txt ssh-copy-id -i app_main xypwa@$ip_app_main;
-#sshpass -f pass.txt ssh-copy-id -i app_rsrv xypwa@$ip_app_rsrv;
-#sshpass -f pass.txt ssh-copy-id -i db_master xypwa@$ip_db_master;
-#sshpass -f pass.txt ssh-copy-id -i db_slave xypwa@$ip_db_slave;
-#sshpass -f pass.txt ssh-copy-id -i elk xypwa@$ip_elk;
+exit 1;
 
-#rsync -e "ssh -i /root/.ssh/app_rsrv" /root/certs/* xypwa@192.168.71.133:/home/xypwa/
 
 #
 # настройка nginx
