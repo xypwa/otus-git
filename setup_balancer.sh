@@ -4,6 +4,8 @@ REPO_DIR='/root/otus-git';
 # Пропускаем проверку незнакомых хостов при ssh подключении #
 echo -e "    UserKnownHostsFile /dev/null\n    StrictHostKeyChecking no" >> /etc/ssh/ssh_config;
 
+
+
 ip_app_node_1="192.168.71.140";
 branch_app_node_1="app-node-1";
 ip_app_node_2="192.168.71.143";
@@ -27,24 +29,30 @@ ssh-keygen -t rsa -f ~/.ssh/general -N ''
 
 # закинем список хостов в файл
 #echo "$ip_app_node-1 $ip_app_node-2 $ip_db_master $ip_db_slave $ip_elk" > ~/my_hosts.txt
-echo "$ip_app_node_1 $branch_app_node_1\n" > my_hosts.txt;
+echo "$ip_app_node_1 $branch_app_node_1" > my_hosts.txt;
 echo "$ip_app_node_2 " >> my_hosts.txt
-echo "$ip_db_master $branch_db_master\n" >> my_hosts.txt
+echo "$ip_db_master $branch_db_master" >> my_hosts.txt
 #echo "$ip_db_slave " >> my_hosts.txt
 #echo "$ip_elk" >> my_hosts.txt
 
 # закидываем ключи на узлы
-for line in `cat ~/my_hosts.txt`; do
-    arr=($line);
-    if [ ${arr[0]} ]; then
-        sshpass -f ~/pass.txt ssh-copy-id -i ~/.ssh/general.pub "${arr[0]}";
-    fi;
-    if [ ${arr[1]} ]; then
-        git clone -b "${arr[1]} --single-branch https://github.com/xypwa/otis-git.git";
-        rsync -avz  "~/${arr[1]} xypwa@${arr[0]}":/home/xypwa/install
-    fi;
-done
 
+while IFS=' ' read -r line || [[ -n "$line" ]]; do
+    # Проверка непустой строки
+    if [ -n "$line" ]; then
+        # Извлечение имени и IP адреса из строки
+        ip=$(echo "$line" | awk '{print $1}' )
+        name=$(echo "$line" | awk '{print $2}' )
+        if [ -n "$ip" ]; then
+                sshpass -f ~/pass.txt ssh-copy-id -i ~/.ssh/general.pub "$ip";
+        fi;
+        if [[ -n "$ip" && -n "$name" ]]; then
+                git clone -b "$name" https://github.com/xypwa/otus-git.git;
+                rsync -avz  ~/otus-git/"$name" xypwa@"$ip":/home/xypwa/install
+        fi;
+
+    fi
+done < ~/my_hosts.txt
 exit 1;
 
 
