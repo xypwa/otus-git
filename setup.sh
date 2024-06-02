@@ -1,6 +1,6 @@
 #!/bin/bash
 
-APP_NODE_1='192.168.71.140';
+#APP_NODE_1='192.168.71.140';
 #APP_NODE_2='192.168.71.140';
 # настройка базы #
 
@@ -12,6 +12,7 @@ GRANT RELOAD, FLUSH_TABLES ON *.* TO 'majordomo'@"${APP_NODE_1}";
 FLUSH PRIVILEGES;
 EOF
 
-sed -i 's/^\(bind-address\s*=\s*\).*$/\10.0.0.0/' /etc/mysql/mysql.conf.d/mysqld.cnf; 
+#sed -i "s/^\(bind-address\s*=\s*\).*$/\1$APP_NODE_1/" /etc/mysql/mysql.conf.d/mysqld.cnf; 
+sed -i "s/^\(bind-address\s*=\s*\).*$/\10.0.0.0" /etc/mysql/mysql.conf.d/mysqld.cnf; 
 
 service mysql restart;
