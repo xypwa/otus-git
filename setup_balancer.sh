@@ -1,9 +1,6 @@
 #!/bin/bash
 
 REPO_DIR='/root/otus-git';
-# Пропускаем проверку незнакомых хостов при ssh подключении #
-echo -e "    UserKnownHostsFile /dev/null\n    StrictHostKeyChecking no" >> /etc/ssh/ssh_config;
-
 
 
 ip_app_node_1="192.168.71.140";
@@ -44,9 +41,10 @@ while IFS=' ' read -r line || [[ -n "$line" ]]; do
         ip=$(echo "$line" | awk '{print $1}' )
         name=$(echo "$line" | awk '{print $2}' )
         if [ -n "$ip" ]; then
-                sshpass -f ~/pass.txt ssh-copy-id -i ~/.ssh/general.pub "$ip";
+                sshpass -f ~/pass.txt ssh-copy-id -i ~/.ssh/general.pub "xypwa@$ip";
         fi;
         if [[ -n "$ip" && -n "$name" ]]; then
+                mkdir "$REPO_DIR/$name"; cd "$REPO_DIR/$name";
                 git clone -b "$name" https://github.com/xypwa/otus-git.git;
                 rsync -avz  ~/otus-git/"$name" xypwa@"$ip":/home/xypwa/install
         fi;
