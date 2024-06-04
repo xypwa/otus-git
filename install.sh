@@ -52,14 +52,5 @@ sed -i "s/Define('DB_PASSWORD', '.*');/Define('DB_PASSWORD', 'qwertyzxv');/" "$A
 
 chown -R www-data:www-data $APP_HOME_DIR;
 
-read -p 'Накатить пустую базу по умочанию?[Y/n]:' IMPORT_EMPTY_BASE;
-if [[ $IMPORT_EMPTY_BASE -eq 'n' || $IMPORT_EMPTY_BASE == 'N' ]]; then
-    echo '';
-    #mysql -v -uroot majordomo<;
-    rsync -avz  "$APP_HOME_DIR/db_terminal.sql" xypwa@"${DB_MASTER_IP}":/home/xypwa/
-else
-    echo '';
-fi;
-
 # установка #
 php "$APP_HOME_DIR/cycle.php";
