@@ -41,17 +41,20 @@ while IFS=' ' read -r line || [[ -n "$line" ]]; do
         ip=$(echo "$line" | awk '{print $1}' )
         name=$(echo "$line" | awk '{print $2}' )
         if [ -n "$ip" ]; then
+                echo "Sending ssh keys on ${ip}";
                 sshpass -f ~/pass.txt ssh-copy-id -i ~/.ssh/general.pub "xypwa@$ip";
         fi;
         if [[ -n "$ip" && -n "$name" ]]; then
+                echo "Downloading git branch ${name} into $REPO_DIR/$name";
                 mkdir "$REPO_DIR/$name"; cd "$REPO_DIR/$name";
                 git clone -b "$name" https://github.com/xypwa/otus-git.git;
-                rsync -avz -e "ssh -i ~/.ssh/general" ~/otus-git/"$name" xypwa@"$ip":/home/xypwa/install
+                echo "Sending branch on ${ip}";
+                rsync -avz -e "ssh -i ~/.ssh/general" ~/otus-git/"$name"/otus-git/* xypwa@"$ip":/home/xypwa/install
         fi;
 
     fi
 done < ~/my_hosts.txt
-exit 1;
+#exit 1;
 
 
 #
