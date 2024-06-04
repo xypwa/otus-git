@@ -9,8 +9,8 @@ ip_app_node_2="192.168.71.143";
 branch_app_node_2="app-node-2";
 ip_db_master="192.168.71.147";
 branch_db_master="db_master";
-#ip_db_slave="192.168.71.133";
-#slave_db_master="db_master";
+ip_db_slave="192.168.71.148";
+branch_db_slave="db_slave";
 #ip_elk="192.168.71.133";
 
 
