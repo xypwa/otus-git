@@ -1,5 +1,22 @@
 #!/bin/bash
 
+systemctl stop mysql;
+
+sed -i 's/^\(bind-address\s*=\s*\).*$/\10.0.0.0/' /etc/mysql/mysql.conf.d/mysqld.cnf
+sed -i "/^bind-address/a\require_secure_transport = ON" /etc/mysql/mysql.conf.d/mysqld.cnf
+
+GTID_MASTER_CONFIG=<<EOF
+server-id = 1
+log-bin = mysql-bin
+binlog_format = row
+gtid-mode=ON
+enforce-gtid-consistency
+log-replica-updates
+EOF
+sed -i '$a\ '${GTID_MASTER_CONFIG}'' /etc/mysql/mysql.conf.d/mysqld.cnf
+
+systemctl start mysql;
+
 APP_NODE_1='192.168.71.140';
 APP_NODE_2='192.168.71.143';
 SLAVE='192.168.71.148';
@@ -22,23 +39,7 @@ GRANT REPLICATION SLAVE ON *.* TO 'slave'@"${SLAVE}";
 FLUSH PRIVILEGES;
 EOF
 
-
-#sed -i "s/^\(bind-address\s*=\s*\).*$/\1$APP_NODE_1/" /etc/mysql/mysql.conf.d/mysqld.cnf;
-#sed -i "s/^\(bind-address\s*=\s*\).*$/\10.0.0.0" /etc/mysql/mysql.conf.d/mysqld.cnf;
-sed -i 's/^\(bind-address\s*=\s*\).*$/\10.0.0.0/' /etc/mysql/mysql.conf.d/mysqld.cnf
-sed -i "/^bind-address/a\require_secure_transport = ON" /etc/mysql/mysql.conf.d/mysqld.cnf
-
 #read -rp "Choose replication type: GTID[1], Binlog position[2]" REPLICATION_TYPE;
 #echo $REPLICATION_TYPE;
-
-GTID_MASTER_CONFIG=<<EOF
-server-id = 1
-log-bin = mysql-bin
-binlog_format = row
-gtid-mode=ON
-enforce-gtid-consistency
-log-replica-updates
-EOF
-sed -i '$a\ '${GTID_MASTER_CONFIG}'' /etc/mysql/mysql.conf.d/mysqld.cnf
 
 service mysql restart;
