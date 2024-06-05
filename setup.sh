@@ -43,5 +43,6 @@ EOF
 
 #read -rp "Choose replication type: GTID[1], Binlog position[2]" REPLICATION_TYPE;
 #echo $REPLICATION_TYPE;
-
+#mysqldump --all-databases -flush-privileges --single-transaction --flush-logs --triggers --routines --events -hex-blob --host=192.168.71.147 --port=3306 --user=root --password='' > mysqlbackup_dump.sql
+mysqldump --all-databases -flush-privileges --single-transaction --flush-logs --triggers --routines --events -hex-blob > mysqlbackup_dump.sql
 service mysql restart;
