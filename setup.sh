@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TYPE=`read -p 'Тип репликации. [1](default) GTID, [2] BINLOG POSITION'`;
+TYPE=$1;
 DB_NAME="majordomo";
 APP_NODE_1='192.168.71.140';
 APP_NODE_2='192.168.71.143';
