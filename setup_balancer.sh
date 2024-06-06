@@ -57,6 +57,13 @@ while IFS=' ' read -r line || [[ -n "$line" ]]; do
 done < ~/my_hosts.txt
 #exit 1;
 
+#
+# настройка репликации БД
+#
+echo "Настройка репликации";
+TYPE=`read -p 'Укажите Тип репликации. [1](default) GTID, [2] BINLOG POSITION'`;
+echo "$TYPE";
+sshpass -f ~/pass.txt ssh -i ~/.ssh/ganeral xypwa@"$ip_db_master" "sudo bash /home/xypwa/install/install.sh ${TYPE}"
 
 #
 # настройка nginx
