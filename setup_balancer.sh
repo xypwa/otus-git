@@ -73,7 +73,7 @@ if [[ "$TYPE" -eq '2' ]]; then
 
     mkdir ~/tmp;
     rsync -avz -e "ssh -i ~/.ssh/general" xypwa@"$ip_db_master":/home/xypwa/certs/* ~/tmp/
-    rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_db_slave":/home/xypwa/install/certs/*
+    rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_db_slave":/home/xypwa/install/
     exit;
     sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_slave" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${FILE} ${POSITION}";
 
