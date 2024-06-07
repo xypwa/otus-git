@@ -73,6 +73,7 @@ fi;
 #if [[ -v "$ENABLE_TSL" ]]; then
   #cp /var/lib/mysql/*.pem ./certs/
 #fi;
+mkdir certs;
 cp /var/lib/mysql/*.pem ./certs/
 
 #mysqldump --master-data -u root majordomo > majordomo.sql
