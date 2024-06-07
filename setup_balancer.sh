@@ -62,22 +62,21 @@ done < ~/my_hosts.txt
 #
 echo "Настройка репликации";
 read -p 'Укажите Тип репликации. [1](default) GTID, [2] BINLOG POSITION: ' TYPE;
-#read -p 'Настроить TSL? ' TSL;
-echo "$TYPE";
-sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_master" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE}"
+read -p 'Настроить TSL? (y/N)' TSL;
+
+sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_master" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${TSL}"
 if [[ "$TYPE" -eq '2' ]]; then
     FILE=`ssh -i ~/.ssh/general xypwa@"$ip_db_master" cat /home/xypwa/binlog_file.output`;
     POSITION=`ssh -i ~/.ssh/general xypwa@"$ip_db_master" cat /home/xypwa/binlog_pos.output`;
     echo "$FILE";
     echo "$POSITION";
 
+    if [[ "$TSL" -eq 'Y' || "$TSL" -eq 'y' ]]; then
     mkdir ~/tmp;
-    rsync -avz -e "ssh -i ~/.ssh/general" xypwa@"$ip_db_master":/home/xypwa/certs/* ~/tmp/
-    rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_db_slave":/home/xypwa/install/
-    exit;
-    sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_slave" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${FILE} ${POSITION}";
-
-    
+        rsync -avz -e "ssh -i ~/.ssh/general" xypwa@"$ip_db_master":/home/xypwa/certs/* ~/tmp/
+        rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_db_slave":/home/xypwa/install/
+        sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_slave" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${FILE} ${POSITION}";
+    fi;
 else
     sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_slave" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE}";
 fi;
