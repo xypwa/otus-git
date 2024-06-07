@@ -61,10 +61,10 @@ done < ~/my_hosts.txt
 # настройка репликации БД
 #
 echo "Настройка репликации";
-TYPE=`read -p 'Укажите Тип репликации. [1](default) GTID, [2] BINLOG POSITION'`;
+read -p 'Укажите Тип репликации. [1](default) GTID, [2] BINLOG POSITION' TYPE;
 echo "$TYPE";
-sshpass -f ~/pass.txt ssh -i ~/.ssh/ganeral xypwa@"$ip_db_master" "sudo -S bash /home/xypwa/install/install.sh ${TYPE}"
-sshpass -f ~/pass.txt ssh -i ~/.ssh/ganeral xypwa@"$ip_db_slave" "sudo -S bash /home/xypwa/install/install.sh ${TYPE}"
+sshpass -f ~/pass.txt ssh -i ~/.ssh/ganeral xypwa@"$ip_db_master" 'echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE}'
+sshpass -f ~/pass.txt ssh -i ~/.ssh/ganeral xypwa@"$ip_db_slave" 'echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE}'
 #
 # настройка nginx
 #
