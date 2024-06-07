@@ -55,7 +55,7 @@ GRANT RELOAD, FLUSH_TABLES ON *.* TO 'majordomo2'@"${APP_NODE_2}";
 
 CREATE USER 'slave'@"${REPLICA_IP}" IDENTIFIED WITH 'caching_sha2_password' BY 'qwertyzxv';
 GRANT REPLICATION SLAVE ON *.* TO 'slave'@"${REPLICA_IP}";
-CREATE USER 'replicant'@"${$REPLICA_IP}" IDENTIFIED WITH 'caching_sha2_password' BY 'qwertyzxv';
+CREATE USER 'replicant'@"${REPLICA_IP}" IDENTIFIED WITH 'caching_sha2_password' BY 'qwertyzxv';
 GRANT REPLICATION SLAVE ON *.* to 'replicant'@"${REPLICA_IP}";
 FLUSH PRIVILEGES;
 EOF
