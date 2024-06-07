@@ -66,7 +66,7 @@ if [[ "${TYPE}" -eq "2" ]]; then
   status=(`mysql -u root -e "SHOW MASTER STATUS;"`);
   file="${status[5]}";
   position="${status[6]}";
-  echo $file > binlog_file.output; echo $position > binlog_pos.output;
+  echo "$file" > binlog_file.output; echo "$position" > binlog_pos.output;
 fi;
 
 #mysqldump --master-data -u root majordomo > majordomo.sql
