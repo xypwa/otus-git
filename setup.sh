@@ -28,7 +28,7 @@ log-replica-updates
 EOF
 
 
-if[[ $TYPE -eq 1 ]]; then
+if [[ $TYPE -eq 1 ]]; then
   sed -i '$a\ '${GTID_MASTER_CONFIG}'' /etc/mysql/mysql.conf.d/mysqld.cnf;
 else
   sed -i '$a\ '${BINLOG_POS_MASTER_CONFIG}'' /etc/mysql/mysql.conf.d/mysqld.cnf;
