@@ -11,30 +11,29 @@ systemctl stop mysql;
 sed -i 's/^\(bind-address\s*=\s*\).*$/\10.0.0.0/' /etc/mysql/mysql.conf.d/mysqld.cnf
 sed -i "/^bind-address/a\require_secure_transport = ON" /etc/mysql/mysql.conf.d/mysqld.cnf
 
-GTID_MASTER_CONFIG=<<EOF
+GTID_MASTER_CONFIG="
 server-id = 1
 log-bin = mysql-bin
 binlog_format = row
 gtid-mode=ON
 enforce-gtid-consistency
 log-replica-updates
-binlog_do_db = "${DB_NAME}"
-EOF
-BINLOG_POS_MASTER_CONFIG=<<EOF
+binlog_do_db = ${DB_NAME}
+"
+
+BINLOG_POS_MASTER_CONFIG="
 server-id = 1
 log_bin = mysql-bin
 binlog_format = row
-binlog_do_db = "${DB_NAME}"
+binlog_do_db = ${DB_NAME}
 log-replica-updates
-EOF
+"
 
 
 if [[ "${TYPE}" -eq '1' ]]; then
-  sed -i '$a\ '${GTID_MASTER_CONFIG}'' /etc/mysql/mysql.conf.d/mysqld.cnf;
-  echo $?;
+  echo "${GTID_MASTER_CONFIG}" >> /etc/mysql/mysql.conf.d/mysqld.cnf;
 else
-  sed -i '$a\ '${BINLOG_POS_MASTER_CONFIG}'' /etc/mysql/mysql.conf.d/mysqld.cnf;
-  echo $?;
+  echo "${BINLOG_POS_MASTER_CONFIG}" >> /etc/mysql/mysql.conf.d/mysqld.cnf;
 fi;
 
 
