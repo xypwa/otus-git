@@ -75,7 +75,8 @@ fi;
 #fi;
 mkdir certs;
 cp /var/lib/mysql/*.pem ./certs/
-chmod -R 644 ./certs
+#chmod -R 644 ./certs
+chown -R xypwa:xypwa ./certs;
 
 #mysqldump --master-data -u root majordomo > majordomo.sql
 #rsync -avz majordomo.sql xypwa@192.168.71.148:/home/xypwa/
