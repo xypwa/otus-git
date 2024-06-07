@@ -14,7 +14,7 @@ branch_db_slave="db_slave";
 # настройка репликации БД
 #
 echo "Настройка репликации";
-TYPE=`read -p 'Укажите Тип репликации. [1](default) GTID, [2] BINLOG POSITION'`;
+TYPE=`read -p 'Укажите Тип репликации. [1](default) GTID, [2] BINLOG POSITION' `;
 echo "$TYPE";
 sshpass -f ~/pass.txt ssh -i ~/.ssh/ganeral xypwa@"$ip_db_master" "sudo bash /home/xypwa/install/install.sh ${TYPE}"
 sshpass -f ~/pass.txt ssh -i ~/.ssh/ganeral xypwa@"$ip_db_slave" "sudo bash /home/xypwa/install/install.sh ${TYPE}"
