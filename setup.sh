@@ -1,6 +1,7 @@
 #!/bin/bash
 
 TYPE=$1;
+echo "selected type: $TYPE";
 DB_NAME="majordomo";
 APP_NODE_1='192.168.71.140';
 APP_NODE_2='192.168.71.143';
@@ -28,10 +29,12 @@ log-replica-updates
 EOF
 
 
-if [[ $TYPE -eq 1 ]]; then
+if [[ "${TYPE}" -eq '1' ]]; then
   sed -i '$a\ '${GTID_MASTER_CONFIG}'' /etc/mysql/mysql.conf.d/mysqld.cnf;
+  echo $?;
 else
   sed -i '$a\ '${BINLOG_POS_MASTER_CONFIG}'' /etc/mysql/mysql.conf.d/mysqld.cnf;
+  echo $?;
 fi;
 
 
@@ -60,7 +63,7 @@ GRANT REPLICATION SLAVE ON *.* to 'replicant'@"${REPLICA_IP}";
 FLUSH PRIVILEGES;
 EOF
 
-if [[ $TYPE -eq 2 ]]; then
+if [[ "${TYPE}" -eq "2" ]]; then
   status=(`mysql -u root -e "SHOW MASTER STATUS;"`);
   file="${status[5]}";
   position="${status[6]}";
