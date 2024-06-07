@@ -65,8 +65,8 @@ read -p 'Укажите Тип репликации. [1](default) GTID, [2] BINL
 echo "$TYPE";
 sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_master" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE}"
 if [[ "$TYPE" -eq '2' ]]; then
-    $FILE=`ssh -i ~/.ssh/general xypwa@"$ip_db_master" cat /home/xypwa/binlog_file.output`;
-    $POSITION=`ssh -i ~/.ssh/general xypwa@"$ip_db_master" cat /home/xypwa/binlog_pos.output`;
+    FILE=`ssh -i ~/.ssh/general xypwa@"$ip_db_master" cat /home/xypwa/binlog_file.output`;
+    POSITION=`ssh -i ~/.ssh/general xypwa@"$ip_db_master" cat /home/xypwa/binlog_pos.output`;
     echo "$FILE";
     echo "$POSITION";
     sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_slave" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${FILE} ${POSITION}";
