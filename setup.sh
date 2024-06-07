@@ -70,13 +70,12 @@ if [[ "${TYPE}" -eq "2" ]]; then
   echo "$file" > binlog_file.output; echo "$position" > binlog_pos.output;
 fi;
 
-#if [[ -v "$ENABLE_TSL" ]]; then
-  #cp /var/lib/mysql/*.pem ./certs/
-#fi;
-mkdir certs;
-cp /var/lib/mysql/*.pem ./certs/
-#chmod -R 644 ./certs
-chown -R xypwa:xypwa ./certs;
+if [[ -v "$ENABLE_TSL" ]]; then
+  mkdir certs;
+  cp /var/lib/mysql/*.pem ./certs/
+  chown -R xypwa:xypwa ./certs;
+fi;
+
 
 #mysqldump --master-data -u root majordomo > majordomo.sql
 #rsync -avz majordomo.sql xypwa@192.168.71.148:/home/xypwa/
