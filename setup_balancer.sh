@@ -26,8 +26,8 @@ ssh-keygen -t rsa -f ~/.ssh/general -N ''
 
 # закинем список хостов в файл
 #echo "$ip_app_node-1 $ip_app_node-2 $ip_db_master $ip_db_slave $ip_elk" > ~/my_hosts.txt
-echo "$ip_app_node_1 $branch_app_node_1" > my_hosts.txt;
-echo "$ip_app_node_2 " >> my_hosts.txt
+#echo "$ip_app_node_1 $branch_app_node_1" > my_hosts.txt;
+#echo "$ip_app_node_2 " >> my_hosts.txt
 echo "$ip_db_master $branch_db_master" >> my_hosts.txt
 echo "$ip_db_slave $branch_db_slave" >> my_hosts.txt
 #echo "$ip_db_slave " >> my_hosts.txt
