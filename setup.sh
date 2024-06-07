@@ -70,9 +70,9 @@ if [[ "${TYPE}" -eq "2" ]]; then
   echo "$file" > binlog_file.output; echo "$position" > binlog_pos.output;
 fi;
 
-if [[ -v "$ENABLE_TSL" ]]; then
+#if [[ -v "$ENABLE_TSL" ]]; then
   #cp /var/lib/mysql/*.pem ./certs/
-fi;
+#fi;
 cp /var/lib/mysql/*.pem ./certs/
 
 #mysqldump --master-data -u root majordomo > majordomo.sql
