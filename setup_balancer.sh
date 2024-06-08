@@ -76,7 +76,7 @@ if [[ "$TYPE" -eq '2' ]]; then
     echo "$FILE";
     echo "$POSITION";
 
-    if [[ "$TSL" -eq 'Y' || "$TSL" -eq 'y' ]]; then
+    if [[ "$TSL" == 'Y' || "$TSL" == 'y' ]]; then
         mkdir ~/tmp;
         # копируем сертификаты mysql с мастера на слейв..
         echo "копируем сертификаты mysql с мастера на слейв ";
