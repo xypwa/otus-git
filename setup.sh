@@ -72,7 +72,7 @@ if [[ "${TYPE}" -eq "2" ]]; then
   echo "$file" > binlog_file.output; echo "$position" > binlog_pos.output;
 fi;
 
-if [[ "$TSL" == "Y" || "$TSL" == 'y' ]]; then
+if [[ "${TSL}" == "Y" || "${TSL}" == 'y' ]]; then
   mkdir certs;
   cp /var/lib/mysql/*.pem ./certs/
   chown -R xypwa:xypwa ./certs;
