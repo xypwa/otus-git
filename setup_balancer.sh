@@ -63,7 +63,8 @@ done < ~/my_hosts.txt
 echo "Настройка репликации";
 read -p 'Укажите Тип репликации. [1](default) GTID, [2] BINLOG POSITION: ' TYPE;
 read -p 'Настроить TSL? (y/N)' TSL;
-
+echo "Вы выбрали Тип репликации ${TYPE==1 && echo 'GTID' || echo 'BINLOG POSITION'}";
+echo "TSL $(TSL=='y' || TSL=='Y' && echo YES || echo NO) (${TSL})";
 sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_master" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${TSL}"
 if [[ "$TYPE" -eq '2' ]]; then
     FILE=`ssh -i ~/.ssh/general xypwa@"$ip_db_master" cat /home/xypwa/binlog_file.output`;
@@ -72,9 +73,13 @@ if [[ "$TYPE" -eq '2' ]]; then
     echo "$POSITION";
 
     if [[ "$TSL" -eq 'Y' || "$TSL" -eq 'y' ]]; then
-    mkdir ~/tmp;
+        mkdir ~/tmp;
+        # копируем сертификаты mysql с мастера на слейв..
+        echo "копируем сертификаты mysql с мастера на слейв ";
         rsync -avz -e "ssh -i ~/.ssh/general" xypwa@"$ip_db_master":/home/xypwa/certs/* ~/tmp/
         rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_db_slave":/home/xypwa/install/
+
+        exit;
         sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_slave" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${FILE} ${POSITION}";
     fi;
 else
