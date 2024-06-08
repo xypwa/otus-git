@@ -10,7 +10,6 @@ REPLICA_IP='192.168.71.148';
 systemctl stop mysql;
 
 sed -i 's/^\(bind-address\s*=\s*\).*$/\10.0.0.0/' /etc/mysql/mysql.conf.d/mysqld.cnf
-sed -i "/^bind-address/a\require_secure_transport = ON" /etc/mysql/mysql.conf.d/mysqld.cnf
 
 GTID_MASTER_CONFIG="
 server-id = 1
@@ -33,6 +32,7 @@ log-replica-updates
 
 if [[ "${TYPE}" -eq '1' ]]; then
   echo "${GTID_MASTER_CONFIG}" >> /etc/mysql/mysql.conf.d/mysqld.cnf;
+  sed -i "/^bind-address/a\require_secure_transport = ON" /etc/mysql/mysql.conf.d/mysqld.cnf
 else
   echo "${BINLOG_POS_MASTER_CONFIG}" >> /etc/mysql/mysql.conf.d/mysqld.cnf;
 fi;
@@ -58,7 +58,8 @@ GRANT RELOAD, FLUSH_TABLES ON *.* TO 'majordomo2'@"${APP_NODE_2}";
 
 #CREATE USER 'slave'@"${REPLICA_IP}" IDENTIFIED WITH 'caching_sha2_password' BY 'qwertyzxv';
 #GRANT REPLICATION SLAVE ON *.* TO 'slave'@"${REPLICA_IP}";
-CREATE USER 'replicant'@"${REPLICA_IP}" IDENTIFIED WITH 'caching_sha2_password' BY 'qwertyzxv' REQUIRE SSL;
+#CREATE USER 'replicant'@"${REPLICA_IP}" IDENTIFIED WITH 'caching_sha2_password' BY 'qwertyzxv' REQUIRE SSL;
+CREATE USER 'replicant'@"${REPLICA_IP}" IDENTIFIED WITH 'caching_sha2_password' BY 'qwertyzxv';
 GRANT REPLICATION SLAVE ON *.* to 'replicant'@"${REPLICA_IP}";
 FLUSH PRIVILEGES;
 EOF
