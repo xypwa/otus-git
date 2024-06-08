@@ -6,6 +6,7 @@ TSL=$2;
 echo "Replication type: $TYPE";
 echo "TSL: $TSL";
 if [[ "${TSL}" == 'n' || "${TSL}" == 'N' ]]; then
+  echo 'exit';
   exit;
 fi;
 
