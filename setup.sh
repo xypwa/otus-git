@@ -83,7 +83,7 @@ if [[ "$TSL" = "Y" || "$TSL" = 'y' ]]; then
   chown -R xypwa:xypwa ./certs;
 fi;
 
-
+mysql -u root majordomo < default_dump.sql;
 #mysqldump --master-data -u root majordomo > majordomo.sql
 #rsync -avz majordomo.sql xypwa@192.168.71.148:/home/xypwa/
 
