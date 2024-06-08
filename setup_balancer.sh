@@ -81,6 +81,13 @@ if [[ "$TYPE" -eq '2' ]]; then
     fi;
      sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_slave" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${FILE} ${POSITION}";
 else
+    if [[ "$TSL" = 'Y' || "$TSL" = 'y' ]]; then
+        mkdir ~/tmp;
+        # копируем сертификаты mysql с мастера на слейв..
+        echo "копируем сертификаты mysql с мастера на слейв ";
+        rsync -avz -e "ssh -i ~/.ssh/general" xypwa@"$ip_db_master":/home/xypwa/certs/* ~/tmp/
+        rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_db_slave":/home/xypwa/install/
+    fi;
     sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_slave" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE}";
 fi;
 exit;
