@@ -25,9 +25,8 @@ echo 'qwertyzxv' > pass.txt
 ssh-keygen -t rsa -f ~/.ssh/general -N ''
 
 # закинем список хостов в файл
-#echo "$ip_app_node-1 $ip_app_node-2 $ip_db_master $ip_db_slave $ip_elk" > ~/my_hosts.txt
-#echo "$ip_app_node_1 $branch_app_node_1" > my_hosts.txt;
-#echo "$ip_app_node_2 " >> my_hosts.txt
+echo "$ip_app_node_1 $branch_app_node_1" > my_hosts.txt;
+echo "$ip_app_node_2 " >> my_hosts.txt
 echo "$ip_db_master $branch_db_master" >> my_hosts.txt
 echo "$ip_db_slave $branch_db_slave" >> my_hosts.txt
 #echo "$ip_db_slave " >> my_hosts.txt
@@ -65,7 +64,18 @@ read -p 'Укажите Тип репликации. [1](default) GTID, [2] BINL
 read -p 'Настроить TSL? (y/N)' TSL;
 echo "Вы выбрали Тип репликации ${TYPE==1 && echo 'GTID' || echo 'BINLOG POSITION'}";
 
+
+
 sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_master" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${TSL}"
+
+#
+# настройка узлов приложения
+#
+sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_1" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
+
+
+exit;
+
 if [[ "$TYPE" -eq '2' ]]; then
     FILE=`ssh -i ~/.ssh/general xypwa@"$ip_db_master" cat /home/xypwa/binlog_file.output`;
     POSITION=`ssh -i ~/.ssh/general xypwa@"$ip_db_master" cat /home/xypwa/binlog_pos.output`;
@@ -90,7 +100,8 @@ else
     fi;
     sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_slave" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE}";
 fi;
-exit;
+
+
 
 #
 # настройка nginx
