@@ -33,7 +33,6 @@ log-replica-updates
 
 if [[ "${TYPE}" -eq '1' ]]; then
   echo "${GTID_MASTER_CONFIG}" >> /etc/mysql/mysql.conf.d/mysqld.cnf;
-  sed -i "/^bind-address/a\require_secure_transport = ON" /etc/mysql/mysql.conf.d/mysqld.cnf
 else
   echo "${BINLOG_POS_MASTER_CONFIG}" >> /etc/mysql/mysql.conf.d/mysqld.cnf;
 fi;
@@ -66,6 +65,7 @@ FLUSH PRIVILEGES;
 EOF
 
 if [[ "${TYPE}" -eq "2" ]]; then
+  sed -i "/^bind-address/a\require_secure_transport = ON" /etc/mysql/mysql.conf.d/mysqld.cnf
   status=(`mysql -u root -e "SHOW MASTER STATUS;"`);
   file="${status[5]}";
   position="${status[6]}";
