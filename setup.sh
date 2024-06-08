@@ -2,7 +2,8 @@
 
 TYPE=$1;
 TSL=$2;
-echo "selected type: $TYPE";
+echo "Replication type: $TYPE";
+echo "TSL: $TSL";
 DB_NAME="majordomo";
 APP_NODE_1='192.168.71.140';
 APP_NODE_2='192.168.71.143';
@@ -71,7 +72,7 @@ if [[ "${TYPE}" -eq "2" ]]; then
   echo "$file" > binlog_file.output; echo "$position" > binlog_pos.output;
 fi;
 
-if [[ "$ENABLE_TSL" -eq "Y" || "$ENABLE_TSL" -eq 'y' ]]; then
+if [[ "$TSL" -eq "Y" || "$TSL" -eq 'y' ]]; then
   mkdir certs;
   cp /var/lib/mysql/*.pem ./certs/
   chown -R xypwa:xypwa ./certs;
