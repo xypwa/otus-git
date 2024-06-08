@@ -5,10 +5,6 @@ TSL=$2;
 
 echo "Replication type: $TYPE";
 echo "TSL: $TSL";
-if [[ "${TSL}" == 'n' || "${TSL}" == 'N' ]]; then
-  echo 'exit';
-  exit;
-fi;
 
 DB_NAME="majordomo";
 APP_NODE_1='192.168.71.140';
@@ -79,7 +75,7 @@ if [[ "${TYPE}" -eq "2" ]]; then
   echo "$file" > binlog_file.output; echo "$position" > binlog_pos.output;
 fi;
 
-if [[ "${TSL}" == "Y" || "${TSL}" == 'y' ]]; then
+if [[ "$TSL" = "Y" || "$TSL" = 'y' ]]; then
   #mysql -u root -e "ALTER USER 'replicant'@'${REPLICA_IP}' REQUIRE SSL;"
   echo "${CERTIFICATE_CONFIG}" >> /etc/mysql/mysql.conf.d/mysqld.cnf;
   mkdir certs;
