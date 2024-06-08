@@ -64,7 +64,11 @@ echo "Настройка репликации";
 read -p 'Укажите Тип репликации. [1](default) GTID, [2] BINLOG POSITION: ' TYPE;
 read -p 'Настроить TSL? (y/N)' TSL;
 echo "Вы выбрали Тип репликации ${TYPE==1 && echo 'GTID' || echo 'BINLOG POSITION'}";
-echo "TSL $(TSL=='y' || TSL=='Y' && echo YES || echo NO) (${TSL})";
+if [ "${TSL}" == "y" ] || [ "${TSL}" == "Y" ]; then
+  echo "TSL YES (${TSL})"
+else
+  echo "TSL NO (${TSL})"  
+fi
 sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_master" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${TSL}"
 if [[ "$TYPE" -eq '2' ]]; then
     FILE=`ssh -i ~/.ssh/general xypwa@"$ip_db_master" cat /home/xypwa/binlog_file.output`;
