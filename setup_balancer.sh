@@ -26,7 +26,7 @@ ssh-keygen -t rsa -f ~/.ssh/general -N ''
 
 # закинем список хостов в файл
 echo "$ip_app_node_1 $branch_app_node_1" > my_hosts.txt;
-echo "$ip_app_node_2 " >> my_hosts.txt
+#echo "$ip_app_node_2 " >> my_hosts.txt
 echo "$ip_db_master $branch_db_master" >> my_hosts.txt
 echo "$ip_db_slave $branch_db_slave" >> my_hosts.txt
 #echo "$ip_db_slave " >> my_hosts.txt
@@ -49,7 +49,7 @@ while IFS=' ' read -r line || [[ -n "$line" ]]; do
                 mkdir "$REPO_DIR/$name"; cd "$REPO_DIR/$name";
                 git clone -b "$name" https://github.com/xypwa/otus-git.git;
                 echo "Sending branch on ${ip}";
-                rsync -avz -e "ssh -i ~/.ssh/general" ~/otus-git/"$name"/otus-git/* xypwa@"$ip":/home/xypwa/install/
+                rsync -avz -e "ssh -i ~/.ssh/general" ~/otus-git/"$name"/otus-git/* xypwa@"$ip":/home/xypwa/install
         fi;
 
     fi
