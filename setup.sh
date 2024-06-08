@@ -2,8 +2,13 @@
 
 TYPE=$1;
 TSL=$2;
+
 echo "Replication type: $TYPE";
 echo "TSL: $TSL";
+if [[ "${TSL}" == 'n' || "${TSL}" == 'N' ]]; then
+  exit;
+fi;
+
 DB_NAME="majordomo";
 APP_NODE_1='192.168.71.140';
 APP_NODE_2='192.168.71.143';
@@ -29,7 +34,11 @@ binlog_format = row
 binlog_do_db = ${DB_NAME}
 log-replica-updates
 "
-
+CERTIFICATE_CONFIG="
+ssl_ca=ca.pem
+ssl_cert=server-cert.pem
+ssl_key=server-key.pem
+"
 
 if [[ "${TYPE}" -eq '1' ]]; then
   echo "${GTID_MASTER_CONFIG}" >> /etc/mysql/mysql.conf.d/mysqld.cnf;
@@ -56,9 +65,6 @@ GRANT RELOAD, FLUSH_TABLES ON *.* TO 'majordomo2'@"${APP_NODE_2}";
 #CREATE USER 'xypwa@'%' IDENTIFIED WITH 'caching_sha2_password' BY 'qwertyzxv';
 #GRANT ALL PRIVILEGES ON *.* TO 'xypwa'@'%' WITH GRANT OPTION;
 
-#CREATE USER 'slave'@"${REPLICA_IP}" IDENTIFIED WITH 'caching_sha2_password' BY 'qwertyzxv';
-#GRANT REPLICATION SLAVE ON *.* TO 'slave'@"${REPLICA_IP}";
-#CREATE USER 'replicant'@"${REPLICA_IP}" IDENTIFIED WITH 'caching_sha2_password' BY 'qwertyzxv' REQUIRE SSL;
 CREATE USER 'replicant'@"${REPLICA_IP}" IDENTIFIED WITH 'caching_sha2_password' BY 'qwertyzxv';
 GRANT REPLICATION SLAVE ON *.* to 'replicant'@"${REPLICA_IP}";
 FLUSH PRIVILEGES;
@@ -73,6 +79,8 @@ if [[ "${TYPE}" -eq "2" ]]; then
 fi;
 
 if [[ "${TSL}" == "Y" || "${TSL}" == 'y' ]]; then
+  #mysql -u root -e "ALTER USER 'replicant'@'${REPLICA_IP}' REQUIRE SSL;"
+  echo "${CERTIFICATE_CONFIG}" >> /etc/mysql/mysql.conf.d/mysqld.cnf;
   mkdir certs;
   cp /var/lib/mysql/*.pem ./certs/
   chown -R xypwa:xypwa ./certs;
