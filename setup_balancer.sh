@@ -49,7 +49,7 @@ while IFS=' ' read -r line || [[ -n "$line" ]]; do
                 mkdir "$REPO_DIR/$name"; cd "$REPO_DIR/$name";
                 git clone -b "$name" https://github.com/xypwa/otus-git.git;
                 echo "Sending branch on ${ip}";
-                rsync -avz -e "ssh -i ~/.ssh/general" ~/otus-git/"$name"/otus-git/* xypwa@"$ip":/home/xypwa/install
+                rsync -avz -e "ssh -i ~/.ssh/general" ~/otus-git/"$name"/otus-git/* xypwa@"$ip":/home/xypwa/install/
         fi;
 
     fi
