@@ -52,19 +52,9 @@ sed -i "s/Define('DB_USER', '.*');/Define('DB_USER', 'majordomo');/" "$APP_HOME_
 sed -i "s/Define('DB_PASSWORD', '.*');/Define('DB_PASSWORD', 'qwertyzxv');/" "$APP_HOME_DIR/config.php";
 sed -i '/echo "ALL CYCLES STARTED" . PHP_EOL;/a exit(1);' "$APP_HOME_DIR/cycle.php";
 
-SSL_CONFIG_MYSQLI="
-if(file_exists('/home/xypwa/install/ca.pem'))
-mysqli_ssl_set(\$obj,
-               NULL,
-               NULL,
-               '/home/xypwa/install/ca.pem',
-               NULL,
-               NULL);
-";
+SSL_CONFIG_MYSQLI="if(file_exists('/home/xypwa/install/ca.pem')) mysqli_ssl_set(\$obj, NULL, NULL, '/home/xypwa/install/ca.pem', NULL, NULL);";
 #  echo "${BINLOG_POSITION_CONFIG}" >> /etc/mysql/mysql.conf.d/mysqld.cnf;
 sed -i "129a ${SSL_CONFIG_MYSQLI}" "$APP_HOME_DIR/lib/mysqli.class.php"
-
-chown -R www-data:www-data $APP_HOME_DIR;
 
 chown -R www-data:www-data $APP_HOME_DIR;
 
