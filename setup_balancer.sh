@@ -60,8 +60,9 @@ done < ~/my_hosts.txt
 # настройка репликации БД
 #
 echo "Настройка репликации";
+
 read -p 'Укажите Тип репликации. [1](default) GTID, [2] BINLOG POSITION: ' TYPE;
-read -p 'Настроить TSL? (y/N)' TSL;
+read -p 'Настроить TSL? [y/N]' TSL;
 echo "Вы выбрали Тип репликации ${TYPE==1 && echo 'GTID' || echo 'BINLOG POSITION'}";
 
 
@@ -72,6 +73,7 @@ sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_master" "echo qwertyzx
 # настройка узлов приложения
 #
 sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_1" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
+sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_2" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
 
 
 exit;
