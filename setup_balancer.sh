@@ -66,14 +66,7 @@ read -p 'Настроить TSL? [y/N]' TSL;
 
 sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_master" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${TSL}"
 
-#
-# настройка узлов приложения
-#
-sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_1" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
-sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_2" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
 
-
-exit;
 
 if [[ "$TYPE" -eq '2' ]]; then
     FILE=`ssh -i ~/.ssh/general xypwa@"$ip_db_master" cat /home/xypwa/binlog_file.output`;
@@ -93,13 +86,24 @@ else
     if [[ "$TSL" = 'Y' || "$TSL" = 'y' ]]; then
         mkdir ~/tmp;
         # копируем сертификаты mysql с мастера на слейв..
-        echo "копируем сертификаты mysql с мастера на слейв ";
+        echo "копируем сертификаты mysql с мастера на слейв и на узлы приложения";
         rsync -avz -e "ssh -i ~/.ssh/general" xypwa@"$ip_db_master":/home/xypwa/certs/* ~/tmp/
+        
         rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_db_slave":/home/xypwa/install/
+        rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_app_node_1":/home/xypwa/install/
+        rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_app_node_2":/home/xypwa/install/
     fi;
     sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_slave" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE}";
 fi;
 
+#
+# настройка узлов приложения
+#
+sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_1" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
+sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_2" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
+
+
+exit;
 
 
 #
