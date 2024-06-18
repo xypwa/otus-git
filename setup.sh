@@ -82,8 +82,13 @@ if [[ "$TSL" = "Y" || "$TSL" = 'y' ]]; then
   cp /var/lib/mysql/*.pem ./certs/
   chown -R xypwa:xypwa ./certs;
 fi;
+read -p 'Восстановить "чистую"(1) или рабочую(2) копию БД' DB;
+if [[ "${DB}" -eq "1" ]]; then
+  mysql -u root majordomo < /home/xypwa/install/default_dump.sql;
+elif [[ "${DB}" -eq "2" ]]; then
+  mysql -u root majordomo < /home/xypwa/install/work_dump.sql;
+fi;
 
-mysql -u root majordomo < /home/xypwa/install/default_dump.sql;
 #mysqldump --master-data -u root majordomo > majordomo.sql
 #rsync -avz majordomo.sql xypwa@192.168.71.148:/home/xypwa/
 
