@@ -7,6 +7,8 @@ sed -i 's/^\(127.0.0.1\s*\).*$/\1app-node/' /etc/hosts;
 text="db_master_host $DB_MASTER_IP\n";
 sed -i '$a '"$text"'' /etc/hosts;
 
+CERTS=`find . -type f -name "*.pem" | wc -l`;
+
 # php config #
 PHP_INI_PATH='/etc/php/7.4/apache2/php.ini';
 PHP_INI_CLI_PATH='/etc/php/7.4/cli/php.ini';
@@ -45,12 +47,26 @@ mkdir $APP_HOME_DIR;
 cp -r ~/majordomo_repo/majordomo/* $APP_HOME_DIR;
 cp "$APP_HOME_DIR/config.php.sample" "$APP_HOME_DIR/config.php";
 
+
+
 #sed -i "s/Define('DB_HOST', '.*');/Define('DB_HOST', 'localhost');/" "$APP_HOME_DIR/config.php";
 sed -i "s/Define('DB_HOST', '.*');/Define('DB_HOST', \"${DB_MASTER_IP}\");/" "$APP_HOME_DIR/config.php";
 sed -i "s/Define('DB_NAME', '.*');/Define('DB_NAME', 'majordomo2');/" "$APP_HOME_DIR/config.php";
 sed -i "s/Define('DB_USER', '.*');/Define('DB_USER', 'majordomo2');/" "$APP_HOME_DIR/config.php";
 sed -i "s/Define('DB_PASSWORD', '.*');/Define('DB_PASSWORD', 'qwertyzxv');/" "$APP_HOME_DIR/config.php";
 sed -i '/echo "ALL CYCLES STARTED" . PHP_EOL;/a exit(1);' "$APP_HOME_DIR/cycle.php";
+
+SSL_CONFIG_MYSQLI="
+if(file_exists('/home/xypwa/install/ca.pem'))
+mysqli_ssl_set(\$obj,
+               NULL,
+               NULL,
+               '/home/xypwa/install/ca.pem',
+               NULL,
+               NULL);
+";
+#  echo "${BINLOG_POSITION_CONFIG}" >> /etc/mysql/mysql.conf.d/mysqld.cnf;
+sed -i "129a ${SSL_CONFIG_MYSQLI}" "$APP_HOME_DIR/lib/mysqli.class.php"
 
 chown -R www-data:www-data $APP_HOME_DIR;
 
