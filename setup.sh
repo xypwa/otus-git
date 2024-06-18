@@ -82,7 +82,7 @@ fi;
 
 if [[ "$TSL" = "Y" || "$TSL" = 'y' ]]; then
   mysql -u root -e "ALTER USER 'replicant'@'${REPLICA_IP}' REQUIRE SSL;"
-  sed -i "/^bind-address/a\require_secure_transport = ON" /etc/mysql/mysql.conf.d/mysqld.cnf
+  #sed -i "/^bind-address/a\require_secure_transport = ON" /etc/mysql/mysql.conf.d/mysqld.cnf
   echo "${CERTIFICATE_CONFIG}" >> /etc/mysql/mysql.conf.d/mysqld.cnf;
   mkdir certs;
   cp /var/lib/mysql/*.pem ./certs/
