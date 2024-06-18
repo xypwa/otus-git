@@ -26,7 +26,7 @@ ssh-keygen -t rsa -f ~/.ssh/general -N ''
 
 # закинем список хостов в файл
 echo "$ip_app_node_1 $branch_app_node_1" > my_hosts.txt;
-#echo "$ip_app_node_2 " >> my_hosts.txt
+echo "$ip_app_node_2 $branch_app_node_2" >> my_hosts.txt
 echo "$ip_db_master $branch_db_master" >> my_hosts.txt
 echo "$ip_db_slave $branch_db_slave" >> my_hosts.txt
 #echo "$ip_db_slave " >> my_hosts.txt
@@ -63,9 +63,6 @@ echo "Настройка репликации";
 
 read -p 'Укажите Тип репликации. [1](default) GTID, [2] BINLOG POSITION: ' TYPE;
 read -p 'Настроить TSL? [y/N]' TSL;
-echo "Вы выбрали Тип репликации ${TYPE==1 && echo 'GTID' || echo 'BINLOG POSITION'}";
-
-
 
 sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_master" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${TSL}"
 
