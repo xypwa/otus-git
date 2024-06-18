@@ -99,6 +99,7 @@ fi;
 #
 # настройка узлов приложения
 #
+echo "Настройка узлов приложения";
 sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_1" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
 sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_2" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
 
@@ -109,6 +110,7 @@ exit;
 #
 # настройка nginx
 #
+echo "Настройка nginx";
 if [[ -e "$REPO_DIR/nginx/default" ]]; then
     cat "$REPO_DIR/nginx/default" | tee /etc/nginx/sites-available/default > /dev/null;
     sed -i "1i\upstream work_nodes {\n\tserver $ip_app_node_1:80;\n\tserver $ip_app_node_2:80;\n}\n" /etc/nginx/sites-available/default;
