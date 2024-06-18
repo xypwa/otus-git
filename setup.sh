@@ -3,7 +3,12 @@
 TYPE=$1;
 TSL=$2;
 
-echo "Replication type: $(($TYPE == 1 ? 'GTID' : 'BINLOG POSITION'))"
+if [ $TYPE -eq 1 ]; then
+    echo "Replication type: GTID"
+else
+    echo "Replication type: BINLOG POSITION"
+fi
+
 echo "TSL: $TSL";
 
 DB_NAME="majordomo";
