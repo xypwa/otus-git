@@ -35,6 +35,7 @@ cat <<'EOF' > /etc/apache2/sites-enabled/majordomo.conf
     </Directory>
 </VirtualHost>
 EOF
+rm /etc/apache2/sites-enabled/000-default.conf;
 systemctl reload apache2;
 
 # распаковка и установка majordomo #
