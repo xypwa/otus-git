@@ -51,7 +51,7 @@ cp "$APP_HOME_DIR/config.php.sample" "$APP_HOME_DIR/config.php";
 
 #sed -i "s/Define('DB_HOST', '.*');/Define('DB_HOST', 'localhost');/" "$APP_HOME_DIR/config.php";
 sed -i "s/Define('DB_HOST', '.*');/Define('DB_HOST', \"${DB_MASTER_IP}\");/" "$APP_HOME_DIR/config.php";
-sed -i "s/Define('DB_NAME', '.*');/Define('DB_NAME', 'majordomo2');/" "$APP_HOME_DIR/config.php";
+sed -i "s/Define('DB_NAME', '.*');/Define('DB_NAME', 'majordomo');/" "$APP_HOME_DIR/config.php";
 sed -i "s/Define('DB_USER', '.*');/Define('DB_USER', 'majordomo2');/" "$APP_HOME_DIR/config.php";
 sed -i "s/Define('DB_PASSWORD', '.*');/Define('DB_PASSWORD', 'qwertyzxv');/" "$APP_HOME_DIR/config.php";
 sed -i '/echo "ALL CYCLES STARTED" . PHP_EOL;/a exit(1);' "$APP_HOME_DIR/cycle.php";
