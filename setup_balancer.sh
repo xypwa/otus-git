@@ -101,8 +101,8 @@ fi;
 # настройка узлов приложения
 #
 echo "Настройка узлов приложения";
-#sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_1" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
-#sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_2" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
+sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_1" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
+sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_2" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
 
 
 exit;
