@@ -89,11 +89,11 @@ if [[ "$TSL" = "Y" || "$TSL" = 'y' ]]; then
   chown -R xypwa:xypwa ./certs;
 fi;
 
-if [[ "${DB}" -eq "2" && -e "/home/xypwa/install/work_dump.sql" ]]; then
-  mysql -u root majordomo < /home/xypwa/install/work_dump.sql;
-else 
-  mysql -u root majordomo < /home/xypwa/install/default_dump.sql;
-fi;
+#if [[ "${DB}" -eq "2" && -e "/home/xypwa/install/work_dump.sql" ]]; then
+#  mysql -u root majordomo < /home/xypwa/install/work_dump.sql;
+#else 
+#  mysql -u root majordomo < /home/xypwa/install/default_dump.sql;
+#fi;
 echo "Backup has insatalled!";
 #mysqldump --master-data -u root majordomo > majordomo.sql
 #rsync -avz majordomo.sql xypwa@192.168.71.148:/home/xypwa/
