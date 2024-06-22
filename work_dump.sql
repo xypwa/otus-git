@@ -21,8 +21,8 @@ SET @@SESSION.SQL_LOG_BIN= 0;
 -- GTID state at the beginning of the backup
 --
 
-SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '181aceb4-1a8a-11ef-acff-000c2900c5ad:1-2102';
-
+-- SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ '181aceb4-1a8a-11ef-acff-000c2900c5ad:1-2102';
+SET @@GLOBAL.GTID_PURGED= OFF;
 --
 -- Table structure for table `actions_log`
 --
