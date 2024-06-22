@@ -73,12 +73,6 @@ GRANT REPLICATION SLAVE ON *.* to 'replicant'@"${REPLICA_IP}";
 FLUSH PRIVILEGES;
 EOF
 
-if [[ "${TYPE}" -eq "2" ]]; then
-  status=(`mysql -u root -e "SHOW MASTER STATUS;"`);
-  file="${status[5]}";
-  position="${status[6]}";
-  echo "$file" > binlog_file.output; echo "$position" > binlog_pos.output;
-fi;
 
 if [[ "$TSL" = "Y" || "$TSL" = 'y' ]]; then
   mysql -u root -e "ALTER USER 'replicant'@'${REPLICA_IP}' REQUIRE SSL;"
@@ -87,6 +81,13 @@ if [[ "$TSL" = "Y" || "$TSL" = 'y' ]]; then
   mkdir certs;
   cp /var/lib/mysql/*.pem ./certs/
   chown -R xypwa:xypwa ./certs;
+fi;
+
+if [[ "${TYPE}" -eq "2" ]]; then
+  status=(`mysql -u root -e "SHOW MASTER STATUS;"`);
+  file="${status[5]}";
+  position="${status[6]}";
+  echo "$file" > binlog_file.output; echo "$position" > binlog_pos.output;
 fi;
 
 #if [[ "${DB}" -eq "2" && -e "/home/xypwa/install/work_dump.sql" ]]; then
