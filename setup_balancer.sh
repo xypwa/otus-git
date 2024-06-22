@@ -29,7 +29,6 @@ ssh-keygen -t rsa -f ~/.ssh/general -N ''
 #echo "$ip_app_node_2 $branch_app_node_2" >> my_hosts.txt
 echo "$ip_db_master $branch_db_master" >> my_hosts.txt
 echo "$ip_db_slave $branch_db_slave" >> my_hosts.txt
-#echo "$ip_db_slave " >> my_hosts.txt
 #echo "$ip_elk" >> my_hosts.txt
 
 # закидываем ключи на узлы
