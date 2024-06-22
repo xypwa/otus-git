@@ -25,8 +25,8 @@ echo 'qwertyzxv' > pass.txt
 ssh-keygen -t rsa -f ~/.ssh/general -N ''
 
 # закинем список хостов в файл
-echo "$ip_app_node_1 $branch_app_node_1" > my_hosts.txt;
-echo "$ip_app_node_2 $branch_app_node_2" >> my_hosts.txt
+#echo "$ip_app_node_1 $branch_app_node_1" > my_hosts.txt;
+#echo "$ip_app_node_2 $branch_app_node_2" >> my_hosts.txt
 echo "$ip_db_master $branch_db_master" >> my_hosts.txt
 echo "$ip_db_slave $branch_db_slave" >> my_hosts.txt
 #echo "$ip_db_slave " >> my_hosts.txt
@@ -82,7 +82,7 @@ if [[ "$TYPE" -eq '2' ]]; then
         rsync -avz -e "ssh -i ~/.ssh/general" xypwa@"$ip_db_master":/home/xypwa/certs/* ~/tmp/
         rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_db_slave":/home/xypwa/install/
     fi;
-     sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_slave" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${FILE} ${POSITION}";
+    sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_slave" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${FILE} ${POSITION}";
 else
     if [[ "$TSL" = 'Y' || "$TSL" = 'y' ]]; then
         mkdir ~/tmp;
@@ -97,6 +97,7 @@ else
     sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_slave" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE}";
 fi;
 
+exit;
 #
 # настройка узлов приложения
 #
