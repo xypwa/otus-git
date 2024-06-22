@@ -89,10 +89,10 @@ if [[ "$TSL" = "Y" || "$TSL" = 'y' ]]; then
   chown -R xypwa:xypwa ./certs;
 fi;
 
-if [[ "${DB}" -eq "1" ]]; then
-  mysql -u root majordomo < /home/xypwa/install/default_dump.sql;
-elif [[ "${DB}" -eq "2" ]]; then
+if [[ "${DB}" -eq "2" && -e "/home/xypwa/install/work_dump.sql" ]]; then
   mysql -u root majordomo < /home/xypwa/install/work_dump.sql;
+else 
+  mysql -u root majordomo < /home/xypwa/install/default_dump.sql;
 fi;
 
 #mysqldump --master-data -u root majordomo > majordomo.sql
