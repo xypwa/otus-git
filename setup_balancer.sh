@@ -63,8 +63,9 @@ echo "Настройка репликации";
 
 read -p 'Укажите Тип репликации. [1](default) GTID, [2] BINLOG POSITION: ' TYPE;
 read -p 'Настроить TSL? [y/N]' TSL;
+read -p 'Тип разворачиваемого бэкапа: [1]Только структура (по умолчанию) [2] Полный (если есть)' BKP;
 
-sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_master" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${TSL}"
+sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_master" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${TSL} ${BKP}"
 
 
 
@@ -100,8 +101,8 @@ fi;
 # настройка узлов приложения
 #
 echo "Настройка узлов приложения";
-sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_1" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
-sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_2" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
+#sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_1" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
+#sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_2" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
 
 
 exit;
