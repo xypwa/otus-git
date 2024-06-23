@@ -43,7 +43,6 @@ else
   echo "$CONF_GTID" >> /etc/mysql/mysql.conf.d/mysqld.cnf;
   service mysql restart;
   mysql -uroot <<EOF
-CREATE DATABASE ${DB_NAME};
 CHANGE REPLICATION SOURCE TO
 SOURCE_HOST = "${DB_MASTER}",
 SOURCE_USER = 'replicant',
