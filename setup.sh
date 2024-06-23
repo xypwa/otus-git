@@ -7,20 +7,21 @@ DB_NAME='majordomo';
 CONF_BINLOG="
 server-id = 2
 log-bin = mysql-bin
-relay-log = mysql-relay-server
+relay-log = relay-log-server
 binlog_do_db = majordomo
 read-only = ON
 "
 CONF_GTID="
 server-id = 2
 log-bin = mysql-bin
-relay-log = mysql-relay-server
+relay-log = relay-log-server
 binlog_do_db = majordomo
 gtid-mode=ON
 enforce-gtid-consistency
 log-replica-updates
 read-only = ON
 "
+service mysql restart;
 CERTS=`find /home/xypwa/install/ -type f -name "*.pem" | wc -l`
 
 
