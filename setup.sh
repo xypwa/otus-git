@@ -4,6 +4,8 @@ TYPE=$1;
 DB_MASTER="192.168.71.147";
 DB_NAME='majordomo';
 
+service mysql stop;
+
 CONF_BINLOG="
 server-id = 2
 log-bin = mysql-bin
@@ -27,7 +29,7 @@ CERTS=`find /home/xypwa/install/ -type f -name "*.pem" | wc -l`
 
 if [[ "$TYPE" -eq '2' ]]; then
   echo "$CONF_BINLOG" >> /etc/mysql/mysql.conf.d/mysqld.cnf;
-  service mysql restart;
+  service mysql start;
   FILE=$2; POSITION=$3;
   mysql -uroot <<EOF
 CREATE DATABASE ${DB_NAME};
@@ -41,7 +43,7 @@ GET_SOURCE_PUBLIC_KEY = 1;
 EOF
 else
   echo "$CONF_GTID" >> /etc/mysql/mysql.conf.d/mysqld.cnf;
-  service mysql restart;
+  service mysql start;
   mysql -uroot <<EOF
 CHANGE REPLICATION SOURCE TO
 SOURCE_HOST = "${DB_MASTER}",
@@ -65,6 +67,6 @@ SOURCE_SSL=1;
 EOF
 fi;
 
-service mysql restart;
+# service mysql restart;
 mysql -u root -e "START REPLICA;"
 mysql -u root -e "SHOW REPLICA STATUS\G"
