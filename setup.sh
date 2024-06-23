@@ -73,6 +73,15 @@ GRANT REPLICATION SLAVE ON *.* to 'replicant'@"${REPLICA_IP}";
 FLUSH PRIVILEGES;
 EOF
 
+if [[ "${DB}" -eq "2" && -f /home/xypwa/install/work_dump.sql ]]; then
+  mysql -u root majordomo < /home/xypwa/install/work_dump.sql;
+elif [ -f /home/xypwa/install/default_dump.sql ]; then
+  mysql -u root majordomo < /home/xypwa/install/default_dump.sql;
+else
+  echo 'Backup file is missing!';
+  exit 1;
+fi;
+echo "Backup has insatalled!";
 
 if [[ "$TSL" = "Y" || "$TSL" = 'y' ]]; then
   mysql -u root -e "ALTER USER 'replicant'@'${REPLICA_IP}' REQUIRE SSL;"
