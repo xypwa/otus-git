@@ -56,7 +56,8 @@ if [[ "$CERTS" -gt 0 ]]; then
   cp -f ./*.pem /var/lib/mysql;
   chown mysql:mysql /var/lib/mysql -R;
     mysql -uroot <<EOF
-CHANGE MASTER TO SOURCE_SSL_CA = "ca.pem", 
+CHANGE REPLICATION TO 
+SOURCE_SSL_CA = "ca.pem", 
 SOURCE_SSL_CERT = "server-cert.pem", 
 SOURCE_SSL_KEY = "server-key.pem", 
 SOURCE_SSL=1;
@@ -65,4 +66,4 @@ fi;
 
 service mysql restart;
 mysql -u root -e "START REPLICA;"
-mysql -u root -e "SHOW REPLICA STATUS;"
+mysql -u root -e "SHOW REPLICA STATUS\G"
