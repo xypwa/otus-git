@@ -81,7 +81,7 @@ if [[ "$TYPE" -eq '2' ]]; then
         rsync -avz -e "ssh -i ~/.ssh/general" xypwa@"$ip_db_master":/home/xypwa/certs/* ~/tmp/
         rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_db_slave":/home/xypwa/install/
     fi;
-    sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_slave" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${FILE} ${POSITION}";
+    #sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_slave" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${FILE} ${POSITION}";
 else
     if [[ "$TSL" = 'Y' || "$TSL" = 'y' ]]; then
         mkdir ~/tmp;
@@ -93,7 +93,7 @@ else
         rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_app_node_1":/home/xypwa/install/
         rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_app_node_2":/home/xypwa/install/
     fi;
-    sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_slave" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE}";
+    #sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_slave" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE}";
 fi;
 
 exit;
