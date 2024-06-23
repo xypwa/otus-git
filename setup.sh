@@ -21,7 +21,7 @@ enforce-gtid-consistency
 log-replica-updates
 read-only = ON
 "
-CERTS="find -type f -name *.pem /home/xypwa/install/ | wc -l"
+CERTS=`find /home/xypwa/install/ -type f -name "*.pem" | wc -l`
 
 
 if [[ "$TYPE" -eq '2' ]]; then
