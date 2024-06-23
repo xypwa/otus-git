@@ -21,12 +21,13 @@ enforce-gtid-consistency
 log-replica-updates
 read-only = ON
 "
-service mysql restart;
+
 CERTS=`find /home/xypwa/install/ -type f -name "*.pem" | wc -l`
 
 
 if [[ "$TYPE" -eq '2' ]]; then
   echo "$CONF_BINLOG" >> /etc/mysql/mysql.conf.d/mysqld.cnf;
+  service mysql restart;
   FILE=$2; POSITION=$3;
   mysql -uroot <<EOF
 CREATE DATABASE ${DB_NAME};
@@ -40,6 +41,7 @@ GET_SOURCE_PUBLIC_KEY = 1;
 EOF
 else
   echo "$CONF_GTID" >> /etc/mysql/mysql.conf.d/mysqld.cnf;
+  service mysql restart;
   mysql -uroot <<EOF
 CREATE DATABASE ${DB_NAME};
 CHANGE REPLICATION SOURCE TO
@@ -56,7 +58,7 @@ if [[ "$CERTS" -gt 0 ]]; then
   cp -f ./*.pem /var/lib/mysql;
   chown mysql:mysql /var/lib/mysql -R;
     mysql -uroot <<EOF
-CHANGE REPLICATION TO 
+CHANGE REPLICATION SOURCE TO 
 SOURCE_SSL_CA = "ca.pem", 
 SOURCE_SSL_CERT = "server-cert.pem", 
 SOURCE_SSL_KEY = "server-key.pem", 
