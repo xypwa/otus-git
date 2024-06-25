@@ -1,0 +1,22 @@
+input {
+  beats {
+    port => 5400
+  }
+}
+
+filter {
+  if [type] == "apache" {
+    mutate {
+      add_tag => ["apache"]
+    }
+  }
+}
+
+output {
+  elasticsearch {
+    hosts => ["http://localhost:9200"]
+    index => "apache-%{+YYYY.MM.dd}"
+    document_type => "apache_logs"
+  }
+  stdout { codec => rubydebug }
+}
