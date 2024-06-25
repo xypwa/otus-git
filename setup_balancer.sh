@@ -11,7 +11,8 @@ ip_db_master="192.168.71.147";
 branch_db_master="db_master";
 ip_db_slave="192.168.71.148";
 branch_db_slave="db_slave";
-#ip_elk="192.168.71.133";
+branch_elk="elk";
+ip_elk="192.168.71.133";
 
 
 # через sudo su зашли под рутом
@@ -29,7 +30,7 @@ echo "$ip_app_node_1 $branch_app_node_1" > my_hosts.txt;
 echo "$ip_app_node_2 $branch_app_node_2" >> my_hosts.txt
 echo "$ip_db_master $branch_db_master" >> my_hosts.txt
 echo "$ip_db_slave $branch_db_slave" >> my_hosts.txt
-#echo "$ip_elk" >> my_hosts.txt
+echo "$ip_elk $branch_elk" >> my_hosts.txt
 
 # закидываем ключи на узлы
 
