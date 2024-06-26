@@ -31,7 +31,7 @@ CERTS=`find /home/xypwa/install/ -type f -name "*.pem" | wc -l`
 if [[ "$TYPE" -eq '2' ]]; then
   echo "$CONF_BINLOG" >> /etc/mysql/mysql.conf.d/mysqld.cnf;
   service mysql start;
-  FILE=$2; POSITION=$3;
+  FILE=$3; POSITION=$4;
   mysql -uroot <<EOF
 CREATE DATABASE ${DB_NAME};
 CHANGE REPLICATION SOURCE TO
