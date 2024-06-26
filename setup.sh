@@ -1,6 +1,7 @@
 #!/bin/bash
 
 TYPE=$1;
+BKP=$2;
 DB_MASTER="192.168.71.147";
 DB_NAME='majordomo';
 
@@ -45,6 +46,7 @@ else
   echo "$CONF_GTID" >> /etc/mysql/mysql.conf.d/mysqld.cnf;
   service mysql start;
   mysql -uroot <<EOF
+CREATE DATABASE ${DB_NAME};
 CHANGE REPLICATION SOURCE TO
 SOURCE_HOST = "${DB_MASTER}",
 SOURCE_USER = 'replicant',
@@ -54,6 +56,15 @@ GET_SOURCE_PUBLIC_KEY = 1;
 EOF
 fi;
 
+
+if [[ "${BKP}" -eq "2" && -f /home/xypwa/install/work_dump.sql ]]; then
+  mysql -u root majordomo < /home/xypwa/install/work_dump.sql;
+elif [ -f /home/xypwa/install/default_dump.sql ]; then
+  mysql -u root majordomo < /home/xypwa/install/default_dump.sql;
+else
+  echo 'Backup file is missing!';
+  exit 1;
+fi;
 
 if [[ "$CERTS" -gt 0 ]]; then
   cp -f ./*.pem /var/lib/mysql;
