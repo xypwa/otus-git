@@ -11,8 +11,8 @@ ip_db_master="192.168.71.147";
 branch_db_master="db_master";
 ip_db_slave="192.168.71.148";
 branch_db_slave="db_slave";
-branch_elk="elk";
 ip_elk="192.168.71.133";
+branch_elk="elk";
 
 
 # через sudo su зашли под рутом
