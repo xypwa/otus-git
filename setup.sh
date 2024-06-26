@@ -92,7 +92,6 @@ if [[ "$TSL" = "Y" || "$TSL" = 'y' ]]; then
   chown -R xypwa:xypwa ./certs;
 fi;
 
-
 if [[ "${DB}" -eq "2" && -f /home/xypwa/install/work_dump.sql ]]; then
   mysql -u root majordomo < /home/xypwa/install/work_dump.sql;
 elif [ -f /home/xypwa/install/default_dump.sql ]; then
@@ -101,13 +100,16 @@ else
   echo 'Backup file is missing!';
   exit 1;
 fi;
-echo "Backup has insatalled!";
+
 if [[ "${TYPE}" -eq "2" ]]; then
   status=(`mysql -u root -e "SHOW MASTER STATUS;"`);
   file="${status[5]}";
   position="${status[6]}";
   echo "$file" > binlog_file.output; echo "$position" > binlog_pos.output;
 fi;
+
+echo "Backup has been insatalled!";
+
 #mysqldump --master-data -u root majordomo > majordomo.sql
 #rsync -avz majordomo.sql xypwa@192.168.71.148:/home/xypwa/
 
