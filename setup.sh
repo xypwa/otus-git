@@ -58,6 +58,7 @@ fi;
 
 
 if [[ "${BKP}" -eq "2" && -f /home/xypwa/install/work_dump.sql ]]; then
+  mysql -u root -e "CREATE DATABASE IF NOT EXISTS majordomo;"
   mysql -u root majordomo < /home/xypwa/install/work_dump.sql;
 elif [ -f /home/xypwa/install/default_dump.sql ]; then
   mysql -u root majordomo < /home/xypwa/install/default_dump.sql;
