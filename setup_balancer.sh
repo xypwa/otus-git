@@ -100,7 +100,7 @@ else
     sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_slave" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${BKP}";
 fi;
 
-exit;
+#exit;
 #
 # настройка узлов приложения
 #
