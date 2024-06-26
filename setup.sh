@@ -69,6 +69,7 @@ else
 fi;
 
 if [[ "$CERTS" -gt 0 ]]; then
+  echo "Файлы сертификата найдены";
   cp -f ./*.pem /var/lib/mysql;
   chown mysql:mysql /var/lib/mysql -R;
     mysql -uroot <<EOF
