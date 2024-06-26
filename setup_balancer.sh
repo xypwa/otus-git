@@ -30,7 +30,7 @@ echo "$ip_app_node_1 $branch_app_node_1" > my_hosts.txt;
 echo "$ip_app_node_2 $branch_app_node_2" >> my_hosts.txt
 echo "$ip_db_master $branch_db_master" >> my_hosts.txt
 echo "$ip_db_slave $branch_db_slave" >> my_hosts.txt
-echo "$ip_elk $branch_elk" >> my_hosts.txt
+#echo "$ip_elk $branch_elk" >> my_hosts.txt
 
 # закидываем ключи на узлы
 
