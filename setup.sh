@@ -13,6 +13,7 @@ fi
 echo "TSL: $TSL";
 
 DB_NAME="majordomo";
+IGNORE_TABLE="majordomo.cached_%";
 APP_NODE_1='192.168.71.140';
 APP_NODE_2='192.168.71.143';
 REPLICA_IP='192.168.71.148';
@@ -28,6 +29,7 @@ gtid-mode=ON
 enforce-gtid-consistency
 log-replica-updates
 binlog_do_db = ${DB_NAME}
+replicate-wild-ignore-table = ${IGNORE_TABLE}
 "
 
 BINLOG_POS_MASTER_CONFIG="
@@ -35,6 +37,7 @@ server-id = 1
 log_bin = mysql-bin
 binlog_format = row
 binlog_do_db = ${DB_NAME}
+replicate-wild-ignore-table = ${IGNORE_TABLE}
 log-replica-updates
 "
 CERTIFICATE_CONFIG="
