@@ -28,25 +28,12 @@ read-only = ON
 "
 
 CERTS=`find /home/xypwa/install/ -type f -name "*.pem" | wc -l`
-if [[ "$CERTS" -gt 0 ]]; then
-  CERTIFICATE_CONFIG="
-ssl_ca=ca.pem
-ssl_cert=server-cert.pem
-ssl_key=server-key.pem
-";
-  echo "${CERTIFICATE_CONFIG}" >> /etc/mysql/mysql.conf.d/mysqld.cnf;
-  echo "Файлы сертификата найдены";
-  cp -f /home/xypwa/install/*.pem /var/lib/mysql;
-  chown mysql:mysql /var/lib/mysql -R;
-  
-fi;
 
 if [[ "$TYPE" -eq '2' ]]; then
   echo "$CONF_BINLOG" >> /etc/mysql/mysql.conf.d/mysqld.cnf;
   service mysql start;
   FILE=$3; POSITION=$4;
   mysql -uroot <<EOF
-CREATE DATABASE ${DB_NAME};
 CHANGE REPLICATION SOURCE TO
 SOURCE_HOST = "${DB_MASTER}",
 SOURCE_USER = 'replicant',
@@ -80,10 +67,16 @@ else
 fi;
 
 if [[ "$CERTS" -gt 0 ]]; then
+  CERTIFICATE_CONFIG="
+ssl_ca=ca.pem
+ssl_cert=server-cert.pem
+ssl_key=server-key.pem
+";
+  echo "${CERTIFICATE_CONFIG}" >> /etc/mysql/mysql.conf.d/mysqld.cnf;
   echo "Файлы сертификата найдены";
-  cp -f ./*.pem /var/lib/mysql;
+  cp -f /home/xypwa/install/*.pem /var/lib/mysql;
   chown mysql:mysql /var/lib/mysql -R;
-    mysql -uroot <<EOF
+  mysql -uroot <<EOF
 CHANGE REPLICATION SOURCE TO 
 SOURCE_SSL_CA = "ca.pem", 
 SOURCE_SSL_CERT = "server-cert.pem", 
