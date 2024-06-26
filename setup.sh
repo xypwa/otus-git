@@ -4,7 +4,7 @@ TYPE=$1;
 BKP=$2;
 DB_MASTER="192.168.71.147";
 DB_NAME='majordomo';
-
+IGNORE_TABLE="majordomo.cached_%";
 service mysql stop;
 
 CONF_BINLOG="
@@ -12,6 +12,7 @@ server-id = 2
 log-bin = mysql-bin
 relay-log = relay-log-server
 binlog_do_db = majordomo
+replicate-wild-ignore-table = ${IGNORE_TABLE}
 read-only = ON
 "
 CONF_GTID="
@@ -19,6 +20,7 @@ server-id = 2
 log-bin = mysql-bin
 relay-log = relay-log-server
 binlog_do_db = majordomo
+replicate-wild-ignore-table = ${IGNORE_TABLE}
 gtid-mode=ON
 enforce-gtid-consistency
 log-replica-updates
