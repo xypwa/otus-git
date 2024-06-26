@@ -36,7 +36,7 @@ ssl_key=server-key.pem
 ";
   echo "${CERTIFICATE_CONFIG}" >> /etc/mysql/mysql.conf.d/mysqld.cnf;
   echo "Файлы сертификата найдены";
-  cp -f ./*.pem /var/lib/mysql;
+  cp -f /home/xypwa/install/*.pem /var/lib/mysql;
   chown mysql:mysql /var/lib/mysql -R;
   
 fi;
