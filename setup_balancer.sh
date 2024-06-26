@@ -110,6 +110,14 @@ exit;
 
 
 #
+# настройка ELK
+#
+sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_elk" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
+
+exit;
+
+
+#
 # настройка nginx
 #
 echo "Настройка nginx";
