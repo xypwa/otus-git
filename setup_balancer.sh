@@ -140,7 +140,10 @@ sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_2" "echo qwertyz
 #
 # настройка ELK
 #
-sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_elk" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
+read -p 'Собирать логи NGINX: [y/N]: ' NGINX;
+read -p 'Собирать логи MYSQL: [y/N]: ' MYSQL;
+read -p 'Собирать логи APACHE: [y/N]: ' APACHE;
+sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_elk" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${NGIMX} ${MYSQL} ${APACHE}";
 
 exit;
 
