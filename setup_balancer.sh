@@ -57,6 +57,8 @@ while IFS=' ' read -r line || [[ -n "$line" ]]; do
     fi
 done < ~/my_hosts.txt
 
+read -p 'Skip: ' Skp;
+
 #
 # настройка nginx
 #
@@ -92,7 +94,9 @@ read -p 'Укажите Тип репликации. [1](default) GTID, [2] BINL
 read -p 'Настроить TSL? [y/N]: ' TSL;
 read -p 'Тип разворачиваемого бэкапа: [1]Только структура (по умолчанию) [2] Полный (если есть): ' BKP;
 
-#sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_master" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${TSL} ${BKP}"
+if [ -z "$SKP" ]; then
+    sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_master" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${TSL} ${BKP}"
+fi;
 
 
 
@@ -112,7 +116,9 @@ if [[ "$TYPE" -eq '2' ]]; then
         rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_app_node_1":/home/xypwa/install/
         rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_app_node_2":/home/xypwa/install/
     fi;
-    #sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_slave" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${BKP} ${FILE} ${POSITION}";
+    if [ -z "$SKP" ]; then
+        sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_slave" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${BKP} ${FILE} ${POSITION}";
+    fi;
 else
     if [[ "$TSL" = 'Y' || "$TSL" = 'y' ]]; then
         mkdir ~/tmp;
@@ -124,7 +130,9 @@ else
         rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_app_node_1":/home/xypwa/install/
         rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_app_node_2":/home/xypwa/install/
     fi;
-    #sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_slave" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${BKP}";
+    if [ -z "$SKP" ]; then
+        sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_slave" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${BKP}";
+    fi;
 fi;
 
 #exit;
@@ -132,8 +140,10 @@ fi;
 # настройка узлов приложения
 #
 echo "Настройка узлов приложения";
-#sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_1" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
-#sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_2" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
+if [ -z "$SKP" ]; then
+    sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_1" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
+    sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_2" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
+fi;
 
 #exit;
 
