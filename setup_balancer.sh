@@ -62,7 +62,7 @@ read -p 'Skip: ' Skp;
 #
 # настройка nginx
 #
-if [ -z "$SKP" ]; then
+if ! [[ -z "$SKP" ]]; then
     echo "установка nginx";
     if [[ -f "$REPO_DIR/nginx/default" ]]; then
         cat "$REPO_DIR/nginx/default" | tee /etc/nginx/sites-available/default > /dev/null;
