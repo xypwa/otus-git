@@ -1,34 +1,6 @@
 #!/bin/bash
 
 
-#
-# настройка nginx
-#
-ng=`nginx -v`;
-if [ "$?" -eq 127 ]; then 
-    echo "установка nginx";
-    if [[ -f "$REPO_DIR/nginx/default" ]]; then
-        cat "$REPO_DIR/nginx/default" | tee /etc/nginx/sites-available/default > /dev/null;
-        sed -i "1i\upstream work_nodes {\n\tserver $ip_app_node_1:80;\n\tserver $ip_app_node_2:80;\n}\n" /etc/nginx/sites-available/default;
-        #htpasswd -c /etc/nginx/conf.d/.htpasswd xypwa
-    fi;
-    
-    if [[ -d "$REPO_DIR/nginx/manage" ]]; then
-        # создание сертификата
-        #mkdir ~/certs && cd ~/certs;
-    
-        NGINX_CERTS_DIR="/etc/nginx/certs/my";
-        mkdir -p "$NGINX_CERTS_DIR";
-    #    openssl genrsa -out "$NGINX_CERTS_DIR/localhost_rootCA.key" 2048;
-    #    openssl req -newkey rsa:2048 -nodes -keyout "$NGINX_CERTS_DIR/localhost_rootCA.key" -out "$NGINX_CERTS_DIR/localhost_rootCA.csr" < ~/otus-git/cert_pass_params.txt
-    #    openssl x509 -signkey "$NGINX_CERTS_DIR/localhost_rootCA.key" -in "$NGINX_CERTS_DIR/localhost_rootCA.csr" -req -days 365 -out "$NGINX_CERTS_DIR/localhost_rootCA.crt";
-        openssl req -newkey rsa:2048 -nodes -keyout "$NGINX_CERTS_DIR/localhost_rootCA.key" -x509 -days 365 -out "$NGINX_CERTS_DIR/localhost_rootCA.crt" < ~/otus-git/cert_pass_params.txt
-    
-        cat "$REPO_DIR/nginx/manage" | tee /etc/nginx/sites-available/manage > /dev/null;
-        ln -sf /etc/nginx/sites-available/manage /etc/nginx/sites-enabled/manage;
-    fi;
-fi;
-
 REPO_DIR='/root/otus-git';
 
 
@@ -42,6 +14,7 @@ ip_db_slave="192.168.71.148";
 branch_db_slave="db_slave";
 ip_elk="192.168.71.133";
 branch_elk="elk";
+
 
 
 # через sudo su зашли под рутом
@@ -59,7 +32,7 @@ echo "$ip_app_node_1 $branch_app_node_1" > my_hosts.txt;
 echo "$ip_app_node_2 $branch_app_node_2" >> my_hosts.txt
 echo "$ip_db_master $branch_db_master" >> my_hosts.txt
 echo "$ip_db_slave $branch_db_slave" >> my_hosts.txt
-#echo "$ip_elk $branch_elk" >> my_hosts.txt
+echo "$ip_elk $branch_elk" >> my_hosts.txt
 
 # закидываем ключи на узлы
 
@@ -83,7 +56,32 @@ while IFS=' ' read -r line || [[ -n "$line" ]]; do
 
     fi
 done < ~/my_hosts.txt
-#exit 1;
+
+#
+# настройка nginx
+#
+
+echo "установка nginx";
+if [[ -f "$REPO_DIR/nginx/default" ]]; then
+    cat "$REPO_DIR/nginx/default" | tee /etc/nginx/sites-available/default > /dev/null;
+    sed -i "1i\upstream work_nodes {\n\tserver $ip_app_node_1:80;\n\tserver $ip_app_node_2:80;\n}\n" /etc/nginx/sites-available/default;
+    #htpasswd -c /etc/nginx/conf.d/.htpasswd xypwa
+fi;
+
+if [[ -d "$REPO_DIR/nginx/manage" ]]; then
+    # создание сертификата
+    #mkdir ~/certs && cd ~/certs;
+
+    NGINX_CERTS_DIR="/etc/nginx/certs/my";
+    mkdir -p "$NGINX_CERTS_DIR";
+#    openssl genrsa -out "$NGINX_CERTS_DIR/localhost_rootCA.key" 2048;
+#    openssl req -newkey rsa:2048 -nodes -keyout "$NGINX_CERTS_DIR/localhost_rootCA.key" -out "$NGINX_CERTS_DIR/localhost_rootCA.csr" < ~/otus-git/cert_pass_params.txt
+#    openssl x509 -signkey "$NGINX_CERTS_DIR/localhost_rootCA.key" -in "$NGINX_CERTS_DIR/localhost_rootCA.csr" -req -days 365 -out "$NGINX_CERTS_DIR/localhost_rootCA.crt";
+    openssl req -newkey rsa:2048 -nodes -keyout "$NGINX_CERTS_DIR/localhost_rootCA.key" -x509 -days 365 -out "$NGINX_CERTS_DIR/localhost_rootCA.crt" < ~/otus-git/cert_pass_params.txt
+
+    cat "$REPO_DIR/nginx/manage" | tee /etc/nginx/sites-available/manage > /dev/null;
+    ln -sf /etc/nginx/sites-available/manage /etc/nginx/sites-enabled/manage;
+fi;
 
 #
 # настройка репликации БД
