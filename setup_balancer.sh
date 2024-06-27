@@ -143,6 +143,7 @@ if ! [[ -z "$SKP" ]]; then
     sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_2" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
 
 fi;
+
 #exit;
 
 #
@@ -151,7 +152,22 @@ fi;
 read -p 'Собирать логи NGINX: [y/N]: ' NGINX;
 read -p 'Собирать логи MYSQL: [y/N]: ' MYSQL;
 read -p 'Собирать логи APACHE: [y/N]: ' APACHE;
+read -p 'Собирать метрики сервера БД [y/N]: ' METRICS_MYSQL;
+if [[ -n "$NGINX" && ( "$NGINX" = 'Y' || "$NGINX" = 'y' ) ]]; then
+    bash ~/otus-git/install-filebeat-config.sh
+fi;
+if [[ -n "$MYSQL" && ( "$MYSQL" = 'Y' || "$MYSQL" = 'y' ) ]]; then
+    sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_master" "echo qwertyzxv | sudo -S bash /home/xypwa/install/install-filebeat-config.sh"
+fi;
+if [[ -n "$METRICS_MYSQL" && ( "$METRICS_MYSQL" = 'Y' || "$METRICS_MYSQL" = 'y' ) ]]; then
+    sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_master" "echo qwertyzxv | sudo -S bash /home/xypwa/install/install-node-exporter.sh"
+fi;
+if [[ -n "$APACHE" && ( "$APACHE" = 'Y' || "$APACHE" = 'y' ) ]]; then
+    #sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_1" "echo qwertyzxv | sudo -S bash /home/xypwa/install/install-filebeat.sh"
+    #sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_2" "echo qwertyzxv | sudo -S bash /home/xypwa/install/install-filebeat.sh"
+fi;
 sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_elk" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${NGIMX} ${MYSQL} ${APACHE}";
+
 
 exit;
 
