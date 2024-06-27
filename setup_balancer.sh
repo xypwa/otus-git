@@ -7,13 +7,13 @@
 ng=`nginx -v`;
 if [ "$?" -eq 127 ]; then 
     echo "установка nginx";
-    if [[ -e "$REPO_DIR/nginx/default" ]]; then
+    if [[ -f "$REPO_DIR/nginx/default" ]]; then
         cat "$REPO_DIR/nginx/default" | tee /etc/nginx/sites-available/default > /dev/null;
         sed -i "1i\upstream work_nodes {\n\tserver $ip_app_node_1:80;\n\tserver $ip_app_node_2:80;\n}\n" /etc/nginx/sites-available/default;
         #htpasswd -c /etc/nginx/conf.d/.htpasswd xypwa
     fi;
     
-    if [[ -e "$REPO_DIR/nginx/manage" ]]; then
+    if [[ -d "$REPO_DIR/nginx/manage" ]]; then
         # создание сертификата
         #mkdir ~/certs && cd ~/certs;
     
