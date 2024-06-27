@@ -108,9 +108,7 @@ echo "Настройка узлов приложения";
 sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_1" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
 sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_2" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
 
-
-exit;
-
+#exit;
 
 #
 # настройка ELK
@@ -118,29 +116,3 @@ exit;
 sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_elk" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
 
 exit;
-
-
-#
-# настройка nginx
-#
-echo "Настройка nginx";
-if [[ -e "$REPO_DIR/nginx/default" ]]; then
-    cat "$REPO_DIR/nginx/default" | tee /etc/nginx/sites-available/default > /dev/null;
-    sed -i "1i\upstream work_nodes {\n\tserver $ip_app_node_1:80;\n\tserver $ip_app_node_2:80;\n}\n" /etc/nginx/sites-available/default;
-    #htpasswd -c /etc/nginx/conf.d/.htpasswd xypwa
-fi;
-
-if [[ -e "$REPO_DIR/nginx/manage" ]]; then
-    # создание сертификата
-    #mkdir ~/certs && cd ~/certs;
-
-    NGINX_CERTS_DIR="/etc/nginx/certs/my";
-    mkdir -p "$NGINX_CERTS_DIR";
-#    openssl genrsa -out "$NGINX_CERTS_DIR/localhost_rootCA.key" 2048;
-#    openssl req -newkey rsa:2048 -nodes -keyout "$NGINX_CERTS_DIR/localhost_rootCA.key" -out "$NGINX_CERTS_DIR/localhost_rootCA.csr" < ~/otus-git/cert_pass_params.txt
-#    openssl x509 -signkey "$NGINX_CERTS_DIR/localhost_rootCA.key" -in "$NGINX_CERTS_DIR/localhost_rootCA.csr" -req -days 365 -out "$NGINX_CERTS_DIR/localhost_rootCA.crt";
-    openssl req -newkey rsa:2048 -nodes -keyout "$NGINX_CERTS_DIR/localhost_rootCA.key" -x509 -days 365 -out "$NGINX_CERTS_DIR/localhost_rootCA.crt" < ~/otus-git/cert_pass_params.txt
-
-    cat "$REPO_DIR/nginx/manage" | tee /etc/nginx/sites-available/manage > /dev/null;
-    ln -sf /etc/nginx/sites-available/manage /etc/nginx/sites-enabled/manage;
-fi;
