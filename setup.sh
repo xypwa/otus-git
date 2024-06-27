@@ -4,7 +4,7 @@ TYPE=$1;
 TSL=$2;
 DB=$3;
 
-if [ $TYPE -eq 1 ]; then
+if [ "$TYPE" -eq 1 ]; then
     echo "Replication type: GTID"
 else
     echo "Replication type: BINLOG POSITION"
