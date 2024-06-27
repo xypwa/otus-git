@@ -16,14 +16,14 @@ fi;
 
 
 if [[ "$INCLUDE_NGINX" = "Y" || "$INCLUDE_NGINX" = "y" ]]; then
-  cp -R "${CONF_NGINX_PATH}" /etc/logstash/conf.d;
+  cp -Rf "${CONF_NGINX_PATH}" /etc/logstash/conf.d;
   sed -i "s/targets: [\'localhost:9100\']/targets: [\'${BALANCER_IP}:9100\']/" /etc/prometheus/prometheus.yml;
 fi;
 if [[ "$INCLUDE_APACHE" = "Y" || "$INCLUDE_APACHE" = "y" ]]; then
-  cp -R "${CONF_APACHE_PATH}" /etc/logstash/conf.d;
+  cp -Rf "${CONF_APACHE_PATH}" /etc/logstash/conf.d;
 fi;
 if [[ "$INCLUDE_MYSQL" = "Y" || "$INCLUDE_MYSQL" = "y" ]]; then
-  cp -R "${CONF_MYSQL_PATH}" /etc/logstash/conf.d;
+  cp -Rf "${CONF_MYSQL_PATH}" /etc/logstash/conf.d;
 fi;
 
 
