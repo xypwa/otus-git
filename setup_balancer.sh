@@ -12,7 +12,7 @@ ip_db_master="192.168.71.147";
 branch_db_master="db_master";
 ip_db_slave="192.168.71.148";
 branch_db_slave="db_slave";
-ip_elk="192.168.71.133";
+ip_elk="192.168.71.149";
 branch_elk="elk";
 
 
