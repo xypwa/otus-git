@@ -29,7 +29,8 @@ if [[ "$INCLUDE_MYSQL" = "Y" || "$INCLUDE_MYSQL" = "y" ]]; then
   cp -Rf "${CONF_MYSQL_PATH}" /etc/logstash/conf.d;
 fi;
 if [[ "$MYSQL_METRIC_ENABLED" = "Y" || "$MYSQL_METRIC_ENABLED" = "y" ]]; then
-  sed -i "s/targets: [\'localhost:9100\']/targets: [\'${MASTER_DB_IP}:9100\', \'${MASTER_DB_IP}:9104\']/" /etc/prometheus/prometheus.yml;
+  #sed -i "s/targets: [\'localhost:9100\']/targets: [\'${MASTER_DB_IP}:9100\', \'${MASTER_DB_IP}:9104\']/" /etc/prometheus/prometheus.yml;
+  sed -i 's/\'localhost:9100\'/\'${MASTER_DB_IP}:9100\',  \'${MASTER_DB_IP}:9104\'/' /etc/prometheus/prometheus.yml
 fi;
 systemctl restart logstash;
 systemctl restart prometheus;
