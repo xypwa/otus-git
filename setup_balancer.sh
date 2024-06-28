@@ -157,15 +157,20 @@ if [[ -n "$NGINX" && ( "$NGINX" = 'Y' || "$NGINX" = 'y' ) ]]; then
     bash ~/otus-git/install-filebeat-config.sh
 fi;
 if [[ -n "$MYSQL" && ( "$MYSQL" = 'Y' || "$MYSQL" = 'y' ) ]]; then
+    echo "Running script on remote ${branch_db_master}"
     sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_master" "echo qwertyzxv | sudo -S bash /home/xypwa/install/install-filebeat-config.sh"
 fi;
 if [[ -n "$METRICS_MYSQL" && ( "$METRICS_MYSQL" = 'Y' || "$METRICS_MYSQL" = 'y' ) ]]; then
+    echo "Running script on remote ${branch_db_master}"
     sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_master" "echo qwertyzxv | sudo -S bash /home/xypwa/install/install-node-exporter.sh"
 fi;
 if [[ -n "$APACHE" && ( "$APACHE" = 'Y' || "$APACHE" = 'y' ) ]]; then
+    echo "Running script on remote ${branch_app_node_1}"
     sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_1" "echo qwertyzxv | sudo -S bash /home/xypwa/install/install-filebeat-config.sh"
+    echo "Running script on remote ${branch_app_node_2}"
     sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_2" "echo qwertyzxv | sudo -S bash /home/xypwa/install/install-filebeat-config.sh"
 fi;
+echo "Running script on remote ${branch_elk}"
 sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_elk" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${NGINX} ${MYSQL} ${APACHE}";
 
 
