@@ -48,10 +48,10 @@ if ! [[ -f /usr/local/bin/node_exporter ]]; then
 fi;
 if ! [[ -f /usr/local/bin/mysql_exporter ]]; then 
   useradd -U --no-create-home --shell /bin/false mysql_exporter
-  cp /home/xypwa/mysql_exporter-*.linux-amd64/mysql_exporter /usr/local/bin
+  cp /home/xypwa/mysqld_exporter-*.linux-amd64/mysqld_exporter /usr/local/bin
   if [[ "$?" -eq 0 ]]; then
-    chown mysql_exporter /usr/local/bin/mysql_exporter;
-    chgrp mysql_exporter /usr/local/bin/mysql_exporter;
+    chown mysql_exporter /usr/local/bin/mysqld_exporter;
+    chgrp mysql_exporter /usr/local/bin/mysqld_exporter;
     mysql -u root -e "CREATE USER 'exporter'@'localhost' IDENTIFIED BY 'password' WITH MAX_USER_CONNECTIONS 3;"
     mysql -u root -e "GRANT PROCESS, REPLICATION CLIENT, SELECT ON *.* TO 'exporter'@'localhost';"
     echo "
