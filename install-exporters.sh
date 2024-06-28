@@ -30,6 +30,7 @@ ExecStart=/usr/local/bin/mysqld_exporter \
 --collect.engine_innodb_status \
 --collect.engine_tokudb_status \
 --collect.global_status \
+
 [Install]
 WantedBy=multi-user.target
 "
