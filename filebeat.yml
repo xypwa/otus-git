@@ -8,6 +8,7 @@ filebeat.inputs:
     - /var/log/nginx/*.log
   fields:
     type: nginx
+  exclude_files: ['.gz$']
 # ============================== Filebeat modules ==============================
 
 filebeat.config.modules:
