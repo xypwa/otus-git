@@ -57,7 +57,7 @@ while IFS=' ' read -r line || [[ -n "$line" ]]; do
     fi
 done < ~/my_hosts.txt
 
-read -p 'Skip: ' Skp;
+read -p 'Skip: ' SKP;
 
 #
 # настройка nginx
