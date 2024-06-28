@@ -23,13 +23,13 @@ Description=MySQL Exporter
 User=mysql_exporter
 Type=simple
 Restart=always
-ExecStart=/usr/local/bin/mysqld_exporter 
---config.my-cnf /etc/.exporter.cnf 
---collect.auto_increment.columns 
---collect.binlog_size 
---collect.engine_innodb_status 
---collect.engine_tokudb_status 
---collect.global_status 
+ExecStart=/usr/local/bin/mysqld_exporter \
+--config.my-cnf /etc/.exporter.cnf \
+--collect.auto_increment.columns \
+--collect.binlog_size \
+--collect.engine_innodb_status \
+--collect.engine_tokudb_status \
+--collect.global_status \
 [Install]
 WantedBy=multi-user.target
 "
@@ -67,5 +67,7 @@ fi;
 
 systemctl daemon-reload
 systemctl start node_exporter
-systemctl status node_exporter
+systemctl start mysql_exporter
+# systemctl status node_exporter
 systemctl enable node_exporter
+systemctl enable mysql_exporter
