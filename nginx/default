@@ -1,3 +1,7 @@
+upstream work_nodes {
+    server http://192.168.71.140/admin.php;
+    server http://192.168.71.143/admin.php;
+}
 server {
         listen 80 default_server;
         listen [::]:80 default_server;
