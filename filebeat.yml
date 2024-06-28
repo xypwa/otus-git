@@ -8,6 +8,7 @@ filebeat.inputs:
     - /var/log/apache2/*.log
   fields:
     type: apache
+  exclude_files: ['.gz$']
 # ============================== Filebeat modules ==============================
 
 filebeat.config.modules:
