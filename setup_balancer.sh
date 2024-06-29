@@ -70,21 +70,18 @@ if [[ -f "$REPO_DIR/nginx/default" ]]; then
     #htpasswd -c /etc/nginx/conf.d/.htpasswd xypwa
 fi;
 
-if [[ -d "$REPO_DIR/nginx/manage" ]]; then
+if [[ -f "$REPO_DIR/nginx/manage" ]]; then
     # создание сертификата
     #mkdir ~/certs && cd ~/certs;
 
     NGINX_CERTS_DIR="/etc/nginx/certs/my";
     mkdir -p "$NGINX_CERTS_DIR";
-#    openssl genrsa -out "$NGINX_CERTS_DIR/localhost_rootCA.key" 2048;
-#    openssl req -newkey rsa:2048 -nodes -keyout "$NGINX_CERTS_DIR/localhost_rootCA.key" -out "$NGINX_CERTS_DIR/localhost_rootCA.csr" < ~/otus-git/cert_pass_params.txt
-#    openssl x509 -signkey "$NGINX_CERTS_DIR/localhost_rootCA.key" -in "$NGINX_CERTS_DIR/localhost_rootCA.csr" -req -days 365 -out "$NGINX_CERTS_DIR/localhost_rootCA.crt";
     openssl req -newkey rsa:2048 -nodes -keyout "$NGINX_CERTS_DIR/localhost_rootCA.key" -x509 -days 365 -out "$NGINX_CERTS_DIR/localhost_rootCA.crt" < ~/otus-git/cert_pass_params.txt
 
     cat "$REPO_DIR/nginx/manage" | tee /etc/nginx/sites-available/manage > /dev/null;
     ln -sf /etc/nginx/sites-available/manage /etc/nginx/sites-enabled/manage;
-    service nginx reload;
 fi;
+service nginx reload;
 
 #
 # настройка репликации БД
