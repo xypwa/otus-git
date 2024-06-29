@@ -57,92 +57,92 @@ while IFS=' ' read -r line || [[ -n "$line" ]]; do
     fi
 done < ~/my_hosts.txt
 
-read -p 'Skip: ' SKP;
+
 
 #
 # настройка nginx
 #
-if ! [[ -z "$SKP" ]]; then
-    echo "установка nginx";
-    if [[ -f "$REPO_DIR/nginx/default" ]]; then
-        cat "$REPO_DIR/nginx/default" | tee /etc/nginx/sites-available/default > /dev/null;
-        sed -i "1i\upstream work_nodes {\n\tserver $ip_app_node_1:80;\n\tserver $ip_app_node_2:80;\n}\n" /etc/nginx/sites-available/default;
-        #htpasswd -c /etc/nginx/conf.d/.htpasswd xypwa
-    fi;
-    
-    if [[ -d "$REPO_DIR/nginx/manage" ]]; then
-        # создание сертификата
-        #mkdir ~/certs && cd ~/certs;
-    
-        NGINX_CERTS_DIR="/etc/nginx/certs/my";
-        mkdir -p "$NGINX_CERTS_DIR";
-    #    openssl genrsa -out "$NGINX_CERTS_DIR/localhost_rootCA.key" 2048;
-    #    openssl req -newkey rsa:2048 -nodes -keyout "$NGINX_CERTS_DIR/localhost_rootCA.key" -out "$NGINX_CERTS_DIR/localhost_rootCA.csr" < ~/otus-git/cert_pass_params.txt
-    #    openssl x509 -signkey "$NGINX_CERTS_DIR/localhost_rootCA.key" -in "$NGINX_CERTS_DIR/localhost_rootCA.csr" -req -days 365 -out "$NGINX_CERTS_DIR/localhost_rootCA.crt";
-        openssl req -newkey rsa:2048 -nodes -keyout "$NGINX_CERTS_DIR/localhost_rootCA.key" -x509 -days 365 -out "$NGINX_CERTS_DIR/localhost_rootCA.crt" < ~/otus-git/cert_pass_params.txt
-    
-        cat "$REPO_DIR/nginx/manage" | tee /etc/nginx/sites-available/manage > /dev/null;
-        ln -sf /etc/nginx/sites-available/manage /etc/nginx/sites-enabled/manage;
-        service nginx reload;
-    fi;
-    
-    #
-    # настройка репликации БД
-    #
-    echo "Настройка репликации";
-    
-    read -p 'Укажите Тип репликации. [1](default) GTID, [2] BINLOG POSITION: ' TYPE;
-    read -p 'Настроить TSL? [y/N]: ' TSL;
-    read -p 'Тип разворачиваемого бэкапа: [1]Только структура (по умолчанию) [2] Полный (если есть): ' BKP;
-    
-    
-    sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_master" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${TSL} ${BKP}"
-    
-    
-    
-    if [[ "$TYPE" -eq '2' ]]; then
-        FILE=`ssh -i ~/.ssh/general xypwa@"$ip_db_master" cat /home/xypwa/binlog_file.output`;
-        POSITION=`ssh -i ~/.ssh/general xypwa@"$ip_db_master" cat /home/xypwa/binlog_pos.output`;
-        echo "File: $FILE";
-        echo "Binlog pos: $POSITION";
-    
-        if [[ "$TSL" = 'Y' || "$TSL" = 'y' ]]; then
-            mkdir ~/tmp;
-            # копируем сертификаты mysql с мастера на слейв..
-            echo "копируем сертификаты mysql с мастера на слейв ";
-            rsync -avz -e "ssh -i ~/.ssh/general" xypwa@"$ip_db_master":/home/xypwa/certs/* ~/tmp/
-            
-            rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_db_slave":/home/xypwa/install/
-            rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_app_node_1":/home/xypwa/install/
-            rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_app_node_2":/home/xypwa/install/
-        fi;
-    
-        sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_slave" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${BKP} ${FILE} ${POSITION}";
-    else
-        if [[ "$TSL" = 'Y' || "$TSL" = 'y' ]]; then
-            mkdir ~/tmp;
-            # копируем сертификаты mysql с мастера на слейв..
-            echo "копируем сертификаты mysql с мастера на слейв и на узлы приложения";
-            rsync -avz -e "ssh -i ~/.ssh/general" xypwa@"$ip_db_master":/home/xypwa/certs/* ~/tmp/
-            
-            rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_db_slave":/home/xypwa/install/
-            rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_app_node_1":/home/xypwa/install/
-            rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_app_node_2":/home/xypwa/install/
-        fi;
-        sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_slave" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${BKP}";
-        
-    fi;
-    
-    #exit;
-    #
-    # настройка узлов приложения
-    #
-    echo "Настройка узлов приложения";
-    
-    sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_1" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
-    sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_2" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
 
+echo "установка nginx";
+if [[ -f "$REPO_DIR/nginx/default" ]]; then
+    cat "$REPO_DIR/nginx/default" | tee /etc/nginx/sites-available/default > /dev/null;
+    sed -i "1i\upstream work_nodes {\n\tserver $ip_app_node_1:80;\n\tserver $ip_app_node_2:80;\n}\n" /etc/nginx/sites-available/default;
+    #htpasswd -c /etc/nginx/conf.d/.htpasswd xypwa
 fi;
+
+if [[ -d "$REPO_DIR/nginx/manage" ]]; then
+    # создание сертификата
+    #mkdir ~/certs && cd ~/certs;
+
+    NGINX_CERTS_DIR="/etc/nginx/certs/my";
+    mkdir -p "$NGINX_CERTS_DIR";
+#    openssl genrsa -out "$NGINX_CERTS_DIR/localhost_rootCA.key" 2048;
+#    openssl req -newkey rsa:2048 -nodes -keyout "$NGINX_CERTS_DIR/localhost_rootCA.key" -out "$NGINX_CERTS_DIR/localhost_rootCA.csr" < ~/otus-git/cert_pass_params.txt
+#    openssl x509 -signkey "$NGINX_CERTS_DIR/localhost_rootCA.key" -in "$NGINX_CERTS_DIR/localhost_rootCA.csr" -req -days 365 -out "$NGINX_CERTS_DIR/localhost_rootCA.crt";
+    openssl req -newkey rsa:2048 -nodes -keyout "$NGINX_CERTS_DIR/localhost_rootCA.key" -x509 -days 365 -out "$NGINX_CERTS_DIR/localhost_rootCA.crt" < ~/otus-git/cert_pass_params.txt
+
+    cat "$REPO_DIR/nginx/manage" | tee /etc/nginx/sites-available/manage > /dev/null;
+    ln -sf /etc/nginx/sites-available/manage /etc/nginx/sites-enabled/manage;
+    service nginx reload;
+fi;
+
+#
+# настройка репликации БД
+#
+echo "Настройка репликации";
+
+read -p 'Укажите Тип репликации. [1](default) GTID, [2] BINLOG POSITION: ' TYPE;
+read -p 'Настроить TSL? [y/N]: ' TSL;
+read -p 'Тип разворачиваемого бэкапа: [1]Только структура (по умолчанию) [2] Полный (если есть): ' BKP;
+
+
+sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_master" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${TSL} ${BKP}"
+
+
+
+if [[ "$TYPE" -eq '2' ]]; then
+    FILE=`ssh -i ~/.ssh/general xypwa@"$ip_db_master" cat /home/xypwa/binlog_file.output`;
+    POSITION=`ssh -i ~/.ssh/general xypwa@"$ip_db_master" cat /home/xypwa/binlog_pos.output`;
+    echo "File: $FILE";
+    echo "Binlog pos: $POSITION";
+
+    if [[ "$TSL" = 'Y' || "$TSL" = 'y' ]]; then
+        mkdir ~/tmp;
+        # копируем сертификаты mysql с мастера на слейв..
+        echo "копируем сертификаты mysql с мастера на слейв ";
+        rsync -avz -e "ssh -i ~/.ssh/general" xypwa@"$ip_db_master":/home/xypwa/certs/* ~/tmp/
+        
+        rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_db_slave":/home/xypwa/install/
+        rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_app_node_1":/home/xypwa/install/
+        rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_app_node_2":/home/xypwa/install/
+    fi;
+
+    sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_slave" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${BKP} ${FILE} ${POSITION}";
+else
+    if [[ "$TSL" = 'Y' || "$TSL" = 'y' ]]; then
+        mkdir ~/tmp;
+        # копируем сертификаты mysql с мастера на слейв..
+        echo "копируем сертификаты mysql с мастера на слейв и на узлы приложения";
+        rsync -avz -e "ssh -i ~/.ssh/general" xypwa@"$ip_db_master":/home/xypwa/certs/* ~/tmp/
+        
+        rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_db_slave":/home/xypwa/install/
+        rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_app_node_1":/home/xypwa/install/
+        rsync -avz -e "ssh -i ~/.ssh/general" ~/tmp/* xypwa@"$ip_app_node_2":/home/xypwa/install/
+    fi;
+    sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_db_slave" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh ${TYPE} ${BKP}";
+    
+fi;
+
+#exit;
+#
+# настройка узлов приложения
+#
+echo "Настройка узлов приложения";
+
+sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_1" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
+sshpass -f ~/pass.txt ssh -i ~/.ssh/general xypwa@"$ip_app_node_2" "echo qwertyzxv | sudo -S bash /home/xypwa/install/setup.sh"
+
+
 
 #exit;
 
