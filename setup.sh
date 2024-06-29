@@ -10,7 +10,7 @@ if [ -z $DB ]; then
     DB=1
 fi;
 
-if [[ "${TYPE}" -eq 2 ]]; then
+if [[ "${TYPE}" -eq 1 ]]; then
     echo "Replication type: GTID"
 else
     echo "Replication type: BINLOG POSITION"
