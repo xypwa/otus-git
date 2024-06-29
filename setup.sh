@@ -89,3 +89,5 @@ fi;
 # service mysql restart;
 mysql -u root -e "START REPLICA;"
 mysql -u root -e "SHOW REPLICA STATUS\G"
+
+echo "*/10 * * * * /home/xypwa/install/cron_backup.sh" >> /etc/crontab
