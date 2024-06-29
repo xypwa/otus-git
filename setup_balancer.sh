@@ -83,6 +83,7 @@ if ! [[ -z "$SKP" ]]; then
     
         cat "$REPO_DIR/nginx/manage" | tee /etc/nginx/sites-available/manage > /dev/null;
         ln -sf /etc/nginx/sites-available/manage /etc/nginx/sites-enabled/manage;
+        service nginx reload;
     fi;
     
     #
